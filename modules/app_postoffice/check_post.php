@@ -44,11 +44,11 @@ function GetTrackInfoForNotify()
    
    $mailBody .= "<table>";
    $mailBody .= "<tr>";
-   $mailBody .="<th>Трек номер</th>";
-   $mailBody .="<th>Название трека</th>";
-   $mailBody .="<th>Дата операции</th>";
-   $mailBody .="<th>Наименование операции</th>";
-   $mailBody .="<th>Местонахождение</th>";
+   $mailBody .="<th>РўСЂРµРє РЅРѕРјРµСЂ</th>";
+   $mailBody .="<th>РќР°Р·РІР°РЅРёРµ С‚СЂРµРєР°</th>";
+   $mailBody .="<th>Р”Р°С‚Р° РѕРїРµСЂР°С†РёРё</th>";
+   $mailBody .="<th>РќР°РёРјРµРЅРѕРІР°РЅРёРµ РѕРїРµСЂР°С†РёРё</th>";
+   $mailBody .="<th>РњРµСЃС‚РѕРЅР°С…РѕР¶РґРµРЅРёРµ</th>";
    $mailBody .= "</tr>";
    foreach ($tracks as $track)
    {
