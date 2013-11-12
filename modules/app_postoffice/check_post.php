@@ -21,8 +21,6 @@ try
    $result = $PostOffice->CheckPostTrack();
    if (!$result)
       throw new Exception("Check post error");
-   else
-      throw new Exception("ok");
 }
 catch(Exception $e)
 {
