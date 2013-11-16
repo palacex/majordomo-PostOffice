@@ -20,9 +20,9 @@ namespace DAL
       {
          $track = array();
          
-         $query = "select TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE
+         $query = "select TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE, LM_DATE
                      from POST_TRACK
-                 order by TRACK_DATE desc;";
+                 order by LM_DATE desc;";
          
          $track = SQLSelect($query);
          
@@ -206,6 +206,14 @@ namespace DAL
          $rec["LM_DATE"]              = $RequestDate;
          
          $res = SQLInsert("POST_TRACKINFO", $rec);
+         
+         if($res)
+         {  
+            $rec = array();
+            $rec["LM_DATE"]              = $RequestDate;
+            
+            $res = SQLUpdate("POST_TRACK", $rec, "TRACK_ID");
+         }
          
          return $res;
       }
