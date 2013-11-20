@@ -226,7 +226,7 @@ namespace DAL
       public static function SelectTrackLastInfoByID
         ($trackID)
       {
-         $query = "select OPER_DATE, ATTRIB_NAME, OPER_POSTPLACE
+         $query = "select OPER_DATE, ATTRIB_NAME, OPER_POSTPLACE, OPER_NAME
                      from POST_TRACKINFO
                     where TRACK_ID = '". $trackID . "'
                       and OPER_DATE = (select max(OPER_DATE) 
@@ -284,12 +284,111 @@ namespace DAL
       public static function SelectProxySettings()
       {
          $query = "select FLAG_PROXY, PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASSWD
-                     from POST_PROXY
-                 order by TRACK_DATE desc;";
+                     from POST_PROXY;";
          
          $proxy = SQLSelect($query);
-         
+         $proxy= $proxy[0];
          return $proxy;
+      }
+      
+      /**
+       * Set proxy settings for check post
+       * @param $proxyFlag Flag
+       * @param $proxyHost Host
+       * @param $proxyPort Port
+       * @param $proxyUser User
+       * @param $proxyPassword Password
+       * @return boolean
+       */
+      public static function SetProxySettings($proxyFlag, $proxyHost, $proxyPort, $proxyUser, $proxyPassword, $currFlag)
+      {
+         $RequestDate =  date('Y-m-d H:i:s');
+         
+         $proxyHost     = DbSafe($proxyHost);
+         $proxyPort     = DbSafe($proxyPort);
+         $proxyUser     = DbSafe($proxyUser);
+         $proxyPassword = DbSafe($proxyPassword);
+         
+         if ($currFlag == null)
+         {
+            $query = "insert into POST_PROXY(FLAG_PROXY, PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASSWD, LM_DATE)
+                      values('" . $proxyFlag . "', '" . $proxyHost . "', '" . $proxyPort . "', '" . $proxyUser . "', '" . $proxyPassword . "', '" . $RequestDate . "');";
+
+         }
+         else
+         {
+            $query = "update POST_PROXY
+                         set FLAG_PROXY   = '" . $proxyFlag . "',
+                             PROXY_HOST   = '" . $proxyHost . "',
+                             PROXY_PORT   = '" . $proxyPort . "',
+                             PROXY_USER   = '" . $proxyUser . "',
+                             PROXY_PASSWD = '" . $proxyPassword . "',
+                             LM_DATE      = '" . $RequestDate . "'
+                       where FLAG_PROXY   = '" . $currFlag . "'";
+         }
+         
+         $res = SQLExec($query);
+         
+         return $res;
+      }
+      
+      /**
+       * Check table exist or not
+       * @param $tableName TableName
+       * @return boolean
+       */
+      public static function isDbTableExists($tableName)
+      {
+         $sql = "desc " + $tableName;
+         
+         return SQLExec($sql);
+      }
+      
+      /**
+       * Get notify settings
+       * @return array
+       */
+      public static function SelectNotifySettings()
+      {
+         $query = "select FLAG_SEND, NOTIFY_EMAIL, NOTIFY_SUBJ
+                     from POST_MAIL;";
+         
+         $notify = SQLSelect($query);
+         $notify= $notify[0];
+         return $notify;
+      }
+      
+      /**
+       * Set email notification settings
+       * @param $notifyFlag string Send email notification or not (Y/N)
+       * @param $currFlag string Current notification flag (Y/N,null)
+       * @param $notifyEmail string Email to send notify
+       * @param $notifySubject string Email subject
+       * @return boolean Action result
+       */
+      public static function SetNotificationSettings($notifyFlag, $currFlag, $notifyEmail, $notifySubject)
+      {
+         $RequestDate =  date('Y-m-d H:i:s');
+        
+         if ($currFlag == null)
+         {
+            $query = "insert into POST_MAIL(FLAG_SEND, LM_DATE)
+                      values('" . $notifyFlag . "', '" . $RequestDate . "');";
+
+         }
+         else
+         {
+            $query = "update POST_MAIL
+                         set FLAG_SEND    = '" . $notifyFlag    . "',
+                             LM_DATE      = '" . $RequestDate   . "',
+                             NOTIFY_EMAIL = '" . $notifyEmail   . "',
+                             NOTIFY_SUBJ  = '" . $notifySubject . "'
+                       where FLAG_SEND    = '" . $currFlag      . "'";
+         }
+         
+         $res = SQLExec($query);
+         
+         return $res;
       }
    }
 }
