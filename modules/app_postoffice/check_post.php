@@ -21,6 +21,9 @@ try
    $result = $PostOffice->CheckPostTrack();
    if (!$result)
       throw new Exception("Check post error");
+   
+   SendResultToClient();
+   
 }
 catch(Exception $e)
 {
@@ -61,6 +64,8 @@ function GetTrackInfoForNotify()
    
    $mailBody .= "</table>";
    
+   $message = $mailBody;
+   
    return $message;
 }
 
@@ -68,8 +73,29 @@ function SendResultToClient()
 {
    try 
    {
+      $PostOffice = new app_postoffice();
+      $notifySettings = $PostOffice->SelectNotifySettings();
+      if (!isset($notifySettings))
+         return;
+      
+      if ($notifySettings["FLAG_SEND"] == "N")
+         return;
+      
+      $mailTo   = $notifySettings["NOTIFY_EMAIL"];
+      
+      if (!isset($mailTo))
+         return;
+      
+      $mailFrom = $mailTo;
+      
+      $mailSubject = !isset($notifySettings["NOTIFY_SUBJ"]) ? "[PostOffice] Post notification" : $notifySettings["NOTIFY_SUBJ"];
+      
       $mailBody = GetTrackInfoForNotify();
       
+      if (!isset($mailBody))
+         return;
+      
+      SendMail_html($mailFrom, $mailTo, $mailSubject, $mailBody);
    }
    catch (Exception $e)
    {
