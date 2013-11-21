@@ -221,13 +221,76 @@ class app_postoffice extends module
          $action = "";
          exit();
          return;
+      }
+      else if ($action == "proxy")
+      {
+         $resultMessage = "";
+         try
+         {
+            // Get TrackNumber form request
+            $proxyFlag     = isset($_REQUEST['proxy_flag'])   ? $_REQUEST['proxy_flag']    : null;
+            $proxyFlag     = $proxyFlag == null ? "N" : "Y";
+            $proxyHost     = isset($_REQUEST['proxy_host'])   ? $_REQUEST['proxy_host']    : null;
+            $proxyPort     = isset($_REQUEST['proxy_port'])   ? $_REQUEST['proxy_port']    : null;
+            $proxyUser     = isset($_REQUEST['proxy_user'])   ? $_REQUEST['proxy_user']    : null;
+            $proxyPassword = isset($_REQUEST['proxy_passwd']) ? $_REQUEST['proxy_passwd']  : null;
+            $currFlag      = isset($_REQUEST['curr_flag'])    ? $_REQUEST['curr_flag']     : null; 
+            
+            //add proxy settings to Database
+            $res = RussianPost::SetProxySettings($proxyFlag, $proxyHost, $proxyPort, $proxyUser, $proxyPassword, $currFlag);
+            $url = "admin.php?pd=&md=panel&inst=&action=app_postoffice#proxy";
+            header_remove();
+            header("Location: " . $url, true);
+            die();
+         }
+         catch(Exception $e)
+         {
+            $resultMessage = "Oops! We have error: " . $e->getMessage();
+         }
          
+         //echo $resultMessage;
+         $action = "";
+         exit();
+         return;
+      }
+      else if ($action == "notify")
+      {
+         $resultMessage = "";
+         try
+         {
+            // Get TrackNumber form request
+            $notifyFlag  = isset($_REQUEST['notify_flag'])   ? $_REQUEST['notify_flag']    : null;
+            $notifyFlag  = $notifyFlag == null ? "N" : "Y";
+            $currFlag    = isset($_REQUEST['curr_notify_flag']) ? $_REQUEST['curr_notify_flag']  : null; 
+            $notifyEmail = isset($_REQUEST['notify_email'])     ? $_REQUEST['notify_email']      : null; 
+            $notifySubj  = isset($_REQUEST['notify_subj'])      ? $_REQUEST['notify_subj']       : null; 
+            
+            //add proxy settings to Database
+            $res = RussianPost::SetNotificationSettings($notifyFlag, $currFlag, $notifyEmail, $notifySubj);
+            $url = "admin.php?pd=&md=panel&inst=&action=app_postoffice#email";
+            header_remove();
+            header("Location: " . $url, true);
+            die();
+         }
+         catch(Exception $e)
+         {
+            $resultMessage = "Oops! We have error: " . $e->getMessage();
+         }
+         
+         //echo $resultMessage;
+         $action = "";
+         exit();
+         return;
       }
       else
       {
-         $trackArray = $this->GetLastCheckedTracks();
-      
-         $out['TRACK_LIST'] = $trackArray;
+         $trackArray     = $this->GetLastCheckedTracks();
+         $proxySettings  = RussianPost::SelectProxySettings();
+         $notifySettings = $this->SelectNotifySettings();
+         
+         $out['TRACK_LIST']  = $trackArray;
+         $out['PROXY_LIST']  = $proxySettings;
+         $out['NOTIFY_LIST'] = $notifySettings;
       }
    }
 
@@ -281,6 +344,23 @@ class app_postoffice extends module
    function dbInstall()
    {
       $RequestDate  =  date('Y-m-d H:i:s');
+      
+       $query = "drop table if exists POST_MAIL";
+       SQLExec($query);
+       
+      $query = "create table POST_MAIL
+                  (
+                     FLAG_SEND            VARCHAR(1) not null default 'N',
+                     LM_DATE              DATETIME not null,
+                     NOTIFY_EMAIL         VARCHAR(64),
+                     NOTIFY_SUBJ          VARCHAR(255),
+                     primary key (FLAG_SEND)
+                  );";
+      SQLExec($query);
+      
+      $query = "insert into POST_MAIL(FLAG_SEND, LM_DATE) values('N','" . $RequestDate ."');";
+      SQLExec($query);
+      
       
       // POST_PROXY     - Proxy setings for RussianPost service
       $query = "drop table if exists POST_PROXY";
@@ -347,8 +427,8 @@ class app_postoffice extends module
       references POST_TRACK (TRACK_ID) on delete restrict on update restrict;";
       SQLExec($query);
       
-      $data = "";
-      parent::dbInstall($data);
+      //$data = "";
+      //parent::dbInstall($data);
    }
    
    function GetLastCheckedTracks()
@@ -368,6 +448,7 @@ class app_postoffice extends module
          $arr['FLAG_CHECK']      = $track['FLAG_CHECK'];
          $arr['TRACK_DATE']      = $track['TRACK_DATE'];
          $arr['OPER_DATE']       = ""; 
+         $arr['OPER_NAME']       = ""; 
          $arr['ATTRIB_NAME']     = "";
          $arr['OPER_POSTPLACE']  = "";
       
@@ -376,6 +457,7 @@ class app_postoffice extends module
          foreach ($trackShortInfo as $info)
          {
             $arr['OPER_DATE']      = $info['OPER_DATE'];
+            $arr['OPER_NAME']      = $info['OPER_NAME'];
             $arr['ATTRIB_NAME']    = $info['ATTRIB_NAME'];
             $arr['OPER_POSTPLACE'] = $info['OPER_POSTPLACE'];
          }
@@ -406,13 +488,21 @@ class app_postoffice extends module
          if(count($tracks) == 0)
             throw new Exception("Track numbers not found!");
          
-         // Check flag Proxy
-         //$isProxy = RussianPost::isProxy();
-         //proxy settings
-         //$proxy   = $isProxy ? RussianPost::SelectProxySettings() : null;
-
-         // init the client
-         $client = new RussianPostAPI();
+         // init the client with or without proxy
+         // Check proxy settings
+         $proxySettings = RussianPost::SelectProxySettings(); 
+         if (isset($proxySettings))
+         {
+            if ($proxySettings["FLAG_PROXY"] == "Y")
+               $client = new RussianPostAPI($proxySettings["PROXY_HOST"],$proxySettings["PROXY_PORT"],$proxySettings["PROXY_USER"],$proxySettings["PROXY_PASSWD"]);
+            else
+               $client = new RussianPostAPI();
+         }
+         else
+         {
+            
+            $client = new RussianPostAPI();
+         }
          
          $timeSeparator  = 'T';   //$separator1
          $timeSeparator2 = '.';   //$separator2
@@ -489,6 +579,15 @@ class app_postoffice extends module
       }
       
       //return $resultMessage;
+   }
+   
+   /**
+    * Return current notify settings
+    * @return array
+    */
+   function SelectNotifySettings()
+   {
+      return RussianPost::SelectNotifySettings();
    }
 }
 ?>

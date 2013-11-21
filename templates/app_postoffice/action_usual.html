@@ -5,7 +5,7 @@
             <th>№</th>
             <th>Трек номер</th>
             <th>Название</th>
-            <th>Дата добавления</th>
+            <th>Дата обновления</th>
             <th>Дата</th>
             <th>Состояние</th>
             <th>Текущее местонахождение</th>
@@ -20,7 +20,7 @@
             <td><#TRACK_LIST.TRACK_NAME#></td>
             <td><#TRACK_LIST.TRACK_DATE#></td>
             <td><#TRACK_LIST.OPER_DATE#></td>
-            <td><#TRACK_LIST.ATTRIB_NAME#></td>
+            <td><#TRACK_LIST.OPER_NAME#>: <#TRACK_LIST.ATTRIB_NAME#></td>
             <td><#TRACK_LIST.OPER_POSTPLACE#></td>
             [#if $T.FLAG_CHECK=="Y"#]
             <td><span class="label label-success">Active</span></td>
