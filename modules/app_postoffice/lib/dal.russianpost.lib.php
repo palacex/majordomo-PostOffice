@@ -4,7 +4,7 @@ namespace DAL
    /**
     * Post Office Data Access Layer
     *
-    * @version 0.2
+    * @version 0.3
     * @author Lutsenko D.V.
     */
    class RussianPostDAL
@@ -23,6 +23,35 @@ namespace DAL
          $query = "select TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE, LM_DATE
                      from POST_TRACK
                  order by LM_DATE desc;";
+         
+         $track = SQLSelect($query);
+         
+         return $track;
+      }
+      
+      /**
+       * Return tracks ordered by ckeck date on russian post
+       * @return array
+       */
+      public static function SelectLastCheckedTracks()
+      {
+         $track = array();
+         $query = "select *
+                     from POST_TRACK
+                     left  join (select a.TRACK_ID, a.TRACK_NAME,  a.FLAG_CHECK,  a.TRACK_DATE, a.LM_TRACK,
+                                        a.OPER_DATE, a.ATTRIB_NAME, a.OPER_POSTPLACE, a.OPER_NAME, a.LM_INFO
+                                   from (select t.TRACK_ID, t.TRACK_NAME,  t.FLAG_CHECK,  t.TRACK_DATE, t.LM_DATE LM_TRACK,
+                                                i.OPER_DATE, i.ATTRIB_NAME, i.OPER_POSTPLACE, i.OPER_NAME, i.LM_DATE LM_INFO
+                                           from POST_TRACKINFO i , POST_TRACK t
+                                          where t.TRACK_ID = i.TRACK_ID
+                                            and OPER_DATE = (select max(OPER_DATE) 
+                                                               from POST_TRACKINFO 
+                                                              where TRACK_ID = t.TRACK_ID
+                                                            )
+                                        ) a
+                                ) as pinfo 
+                          using (TRACK_ID)
+                 order by OPER_DATE desc, LM_DATE desc";
          
          $track = SQLSelect($query);
          

@@ -1,4 +1,4 @@
-<?
+<?php
 
 require_once(DIR_MODULES . '/app_postoffice/lib/dal.russianpost.lib.php');
 require_once(DIR_MODULES . '/app_postoffice/lib/russianpost.lib.php');
@@ -9,15 +9,13 @@ use DAL\RussianPostDAL as RussianPost;
  *
  * @package PostOffice
  * @author LDV <dev@silvergate.ru>
- * @version 0.1
+ * @version 1.4
  */
 class app_postoffice extends module
 {
    /**
     * app_postoffice
-    *
     * Module class constructor
-    *
     * @access private
     */
    function app_postoffice()
@@ -30,12 +28,10 @@ class app_postoffice extends module
 
    /**
     * saveParams
-    *
     * Saving module parameters
-    *
     * @access public
     */
-   function saveParams()
+   function saveParams($data = 1)
    {
       $p = array();
       
@@ -55,10 +51,7 @@ class app_postoffice extends module
    }
 
    /**
-    * getParams
-    *
     * Getting module parameters from query string
-    *
     * @access public
     */
    function getParams()
@@ -87,9 +80,7 @@ class app_postoffice extends module
 
    /**
     * Run
-    *
     * Description
-    *
     * @access public
     */
    function run()
@@ -123,9 +114,7 @@ class app_postoffice extends module
    
    /**
     * BackEnd
-    *
     * Module backend
-    *
     * @access public
     */
    function admin(&$out)
@@ -296,9 +285,7 @@ class app_postoffice extends module
 
    /**
     * FrontEnd
-    *
     * Module frontend
-    *
     * @access public
     */
    function usual(&$out)
@@ -309,134 +296,34 @@ class app_postoffice extends module
   
    /**
     * Install
-    *
     * Module installation routine
-    *
     * @access private
     */
-   function install()
+   function install($parent_name = '')
    {
       parent::install();
    }
    
    /**
     * Uninstall
-    *
     * Module uninstall routine
-    *
     * @access public
     */
-   function uninstall()
-   {
-      SQLExec('drop table if exists POST_PROXY');
-      SQLExec('drop table if exists POST_TRACKINFO');
-      SQLExec('drop table if exists POST_TRACK');
-      parent::uninstall();
-   }
+   function uninstall() { }
    
    /**
     * dbInstall
-    *
     * Database installation routine
-    *
     * @access private
     */
-   function dbInstall()
-   {
-      $RequestDate  =  date('Y-m-d H:i:s');
-      
-       $query = "drop table if exists POST_MAIL";
-       SQLExec($query);
-       
-      $query = "create table POST_MAIL
-                  (
-                     FLAG_SEND            VARCHAR(1) not null default 'N',
-                     LM_DATE              DATETIME not null,
-                     NOTIFY_EMAIL         VARCHAR(64),
-                     NOTIFY_SUBJ          VARCHAR(255),
-                     primary key (FLAG_SEND)
-                  );";
-      SQLExec($query);
-      
-      $query = "insert into POST_MAIL(FLAG_SEND, LM_DATE) values('N','" . $RequestDate ."');";
-      SQLExec($query);
-      
-      
-      // POST_PROXY     - Proxy setings for RussianPost service
-      $query = "drop table if exists POST_PROXY";
-      SQLExec($query);
-      $query = "create table POST_PROXY
-                (
-                  FLAG_PROXY           VARCHAR(1) not null default 'N',
-                  PROXY_HOST           VARCHAR(64),
-                  PROXY_PORT           VARCHAR(4),
-                  PROXY_USER           VARCHAR(64),
-                  PROXY_PASSWD         VARCHAR(64),
-                  LM_DATE              DATETIME not null,
-                  primary key (FLAG_PROXY)
-                );";
-      SQLExec($query);
-      
-      $rec = array();
-      $rec["FLAG_PROXY"]   = "N";
-      $rec["PROXY_HOST"]   = "";
-      $rec["PROXY_PORT"]   = "";
-      $rec["PROXY_USER"]   = "";
-      $rec["PROXY_PASSWD"] = "";
-      $rec["LM_DATE"]      = $RequestDate;
-     
-      SQLInsert("POST_PROXY",$rec);
-      
-      // POST_TRACK     - Track list
-      $query = "drop table if exists POST_TRACK";
-      SQLExec($query);
-      $query = "create table POST_TRACK
-                  (
-                     TRACK_ID             VARCHAR(14) not null,
-                     TRACK_NAME           VARCHAR(64) not null,
-                     FLAG_CHECK           VARCHAR(1) not null default 'Y',
-                     TRACK_DATE           DATETIME not null,
-                     LM_DATE              DATETIME not null,
-                     primary key (TRACK_ID)
-                  );";
-      SQLExec($query);
-      
-      // POST_TRACKINFO - track detail info
-      $query = "drop table if exists POST_TRACKINFO";
-      SQLExec($query);
-      $query = "create table POST_TRACKINFO
-                  (
-                     TRACK_ID             VARCHAR(14) not null,
-                     OPER_DATE            DATETIME not null,
-                     OPER_TYPE            INT(10) not null,
-                     OPER_NAME            VARCHAR(64) not null,
-                     ATTRIB_ID            INT(10),
-                     ATTRIB_NAME          VARCHAR(64),
-                     OPER_POSTCODE        INT(10),
-                     OPER_POSTPLACE       VARCHAR(64) not null,
-                     ITEM_WEIGHT          DECIMAL(10,6),
-                     DECLARED_VALUE       DECIMAL(10,6),
-                     DELIVERY_PRICE       DECIMAL(10,6),
-                     DESTINATION_POSTCODE INT(10),
-                     DELIVERY_ADDRESS     VARCHAR(255),
-                     LM_DATE              DATETIME not null,
-                     primary key (TRACK_ID, OPER_DATE)
-                  );";
-      SQLExec($query);
-      $query = "alter table POST_TRACKINFO add constraint FK_POST_TRACKINFO__TRACK_ID foreign key (TRACK_ID)
-      references POST_TRACK (TRACK_ID) on delete restrict on update restrict;";
-      SQLExec($query);
-      
-      //$data = "";
-      //parent::dbInstall($data);
-   }
+   function dbInstall($data) { }
    
    function GetLastCheckedTracks()
    {
       $trackArray = array();
       $trackNum   = 1;
       
-      $tracks  = RussianPost::SelectTrack();
+      $tracks  = RussianPost::SelectLastCheckedTracks();
      
       foreach ($tracks as $track)
       {
@@ -447,20 +334,11 @@ class app_postoffice extends module
          $arr['TRACK_NAME']      = $track['TRACK_NAME'];
          $arr['FLAG_CHECK']      = $track['FLAG_CHECK'];
          $arr['TRACK_DATE']      = $track['TRACK_DATE'];
-         $arr['OPER_DATE']       = ""; 
-         $arr['OPER_NAME']       = ""; 
-         $arr['ATTRIB_NAME']     = "";
-         $arr['OPER_POSTPLACE']  = "";
+         $arr['OPER_DATE']       = $track['OPER_DATE']; 
+         $arr['OPER_NAME']       = $track['OPER_NAME']; 
+         $arr['ATTRIB_NAME']     = $track['ATTRIB_NAME'];
+         $arr['OPER_POSTPLACE']  = $track['OPER_POSTPLACE'];
       
-         $trackShortInfo = RussianPost::SelectTrackLastInfoByID($trackID);
-      
-         foreach ($trackShortInfo as $info)
-         {
-            $arr['OPER_DATE']      = $info['OPER_DATE'];
-            $arr['OPER_NAME']      = $info['OPER_NAME'];
-            $arr['ATTRIB_NAME']    = $info['ATTRIB_NAME'];
-            $arr['OPER_POSTPLACE'] = $info['OPER_POSTPLACE'];
-         }
          $trackArray[] = $arr;
          $trackNum++;
       }
