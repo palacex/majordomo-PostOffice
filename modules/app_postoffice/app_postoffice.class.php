@@ -399,6 +399,22 @@ class app_postoffice extends module
          $query = "insert into POST_PROXY(FLAG_PROXY, PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASSWD, LM_DATE)";
          $query .= " select * from TMP_POST_PROXY;";
          SQLExec($query);
+         
+         $log = Logger::getLogger(__METHOD__); 
+         
+         try
+         {
+            $res = SQLExec("select count(FLAG_PROXY) from POST_PROXY)"); 
+            $log->debug($res);
+         }
+         catch(Exception $e)
+         {
+            $log->debug($e->message);
+         }
+         /* $query = "insert into POST_PROXY(FLAG_PROXY, PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASSWD, LM_DATE)";
+         $query .= "values('N', NULL, NULL, NULL, NULL, NOW());";
+         SQLExec($query);
+         */
 
          $query = "create table POST_MAIL(";
          $query .= " FLAG_SEND            VARCHAR(1) not null default 'N',";
