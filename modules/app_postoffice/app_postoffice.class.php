@@ -301,31 +301,7 @@ class app_postoffice extends module
     */
    function install($parent_name = '')
    {
-      parent::install(); 
-      
-   
-   }
-   
-   /**
-    * Uninstall
-    * Module uninstall routine
-    * @access public
-    */
-   function uninstall() 
-   {
-      SQLExec("drop table if exists POST_PROXY");
-      SQLExec("drop table if exists POST_MAIL");
-      SQLExec("drop table if exists POST_TRACKINFO");
-      SQLExec("drop table if exists POST_TRACK");
-   }
-   
-   /**
-    * dbInstall
-    * Database installation routine
-    * @access private
-    */
-   function dbInstall($data) 
-   {
+      //parent::install(); 
       if (!file_exists(DIR_MODULES . $this->name . "/installed")) 
       {
          SQLExec("drop table if exists POST_PROXY");
@@ -462,11 +438,35 @@ class app_postoffice extends module
          $query .= " primary key (TRACK_ID, OPER_DATE)";
          $query .= " );";
          SQLExec($query);
-      
+         
          $query = "insert into POST_TRACKINFO(TRACK_ID, OPER_DATE, OPER_TYPE, OPER_NAME, ATTRIB_ID, ATTRIB_NAME, OPER_POSTCODE, OPER_POSTPLACE, ITEM_WEIGHT, DECLARED_VALUE, DELIVERY_PRICE, DESTINATION_POSTCODE, DELIVERY_ADDRESS, LM_DATE)";
          $query .= " select * from TMP_POST_TRACKINFO;";
          SQLExec($query);
       }
+   
+   }
+   
+   /**
+    * Uninstall
+    * Module uninstall routine
+    * @access public
+    */
+   function uninstall() 
+   {
+      SQLExec("drop table if exists POST_PROXY");
+      SQLExec("drop table if exists POST_MAIL");
+      SQLExec("drop table if exists POST_TRACKINFO");
+      SQLExec("drop table if exists POST_TRACK");
+   }
+   
+   /**
+    * dbInstall
+    * Database installation routine
+    * @access private
+    */
+   function dbInstall($data) 
+   {
+     
    }
    
    function GetLastCheckedTracks()
