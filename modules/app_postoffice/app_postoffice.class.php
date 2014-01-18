@@ -441,7 +441,7 @@ class app_postoffice extends module
          SQLExec($query);
 
          $query = " insert into POST_TRACK(TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE, LM_DATE)";
-         $query .= " select * from TMP_POST_TRACK;");
+         $query .= " select * from TMP_POST_TRACK;";
          SQLExec($query);
 
          $query = "create table POST_TRACKINFO(";
