@@ -301,148 +301,9 @@ class app_postoffice extends module
     */
    function install($parent_name = '')
    {
-     // parent::install(); 
+      parent::install(); 
       
-   if (!file_exists(DIR_MODULES . $this->name . "/installed")) 
-   {
-      SQLExec("drop table if exists POST_PROXY");
-      SQLExec("drop table if exists POST_MAIL");
-      SQLExec("drop table if exists POST_TRACKINFO");
-      SQLExec("drop table if exists POST_TRACK");
-
-      $query = "create table POST_PROXY(";
-      $query .+ "  FLAG_PROXY           VARCHAR(1) not null default 'N',";
-      $query .+ "  PROXY_HOST           VARCHAR(64),";
-      $query .+ "  PROXY_PORT           VARCHAR(4),";
-      $query .+ "  PROXY_USER           VARCHAR(64),";
-      $query .+ "  PROXY_PASSWD         VARCHAR(64),";
-      $query .+ "  LM_DATE              DATETIME not null,";
-      $query .+ "  primary key (FLAG_PROXY)";
-      $query .+ "  );";
-      SQLExec($query);
-
-      $query = "insert into POST_PROXY(FLAG_PROXY, PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASSWD, LM_DATE)";
-      $query .= "values('N', NULL, NULL, NULL, NULL, NOW());";
-      SQLExec($query);
-
-      $query = "create table POST_MAIL(";
-      $query .= " FLAG_SEND            VARCHAR(1) not null default 'N',";
-      $query .= " LM_DATE              DATETIME not null,";
-      $query .= " NOTIFY_EMAIL         VARCHAR(64),";
-      $query .= " NOTIFY_SUBJ          VARCHAR(255),";
-      $query .= " primary key (FLAG_SEND)";
-      $query .= ");";
-      SQLExec($query);
-
-      $query = "insert into POST_MAIL(FLAG_SEND, LM_DATE, NOTIFY_EMAIL, NOTIFY_SUBJ)";
-      $query .= " values('N', NOW(), NULL, NULL);";
-      SQLExec($query);
-
-      $query = "create table POST_TRACK(";
-      $query .= " TRACK_ID             VARCHAR(14) not null,";
-      $query .= " TRACK_NAME           VARCHAR(64) not null,";
-      $query .= " FLAG_CHECK           VARCHAR(1) not null default 'Y',";
-      $query .= " TRACK_DATE           DATETIME not null,";
-      $query .= " LM_DATE              DATETIME not null,";
-      $query .= " primary key (TRACK_ID)";
-      $query .= ");";
-      SQLExec($query);
-
-      $query = "create table POST_TRACKINFO(";
-      $query .= " TRACK_ID             VARCHAR(14) not null,";
-      $query .= " OPER_DATE            DATETIME not null,";
-      $query .= " OPER_TYPE            INT(10) not null,";
-      $query .= " OPER_NAME            VARCHAR(64) not null,";
-      $query .= " ATTRIB_ID            INT(10),";
-      $query .= " ATTRIB_NAME          VARCHAR(64),";
-      $query .= " OPER_POSTCODE        INT(10),";
-      $query .= " OPER_POSTPLACE       VARCHAR(64) not null,";
-      $query .= " ITEM_WEIGHT          DECIMAL(10,6),";
-      $query .= " DECLARED_VALUE       DECIMAL(10,6),";
-      $query .= " DELIVERY_PRICE       DECIMAL(10,6),";
-      $query .= " DESTINATION_POSTCODE INT(10),";
-      $query .= " DELIVERY_ADDRESS     VARCHAR(255),";
-      $query .= " LM_DATE              DATETIME not null,";
-      $query .= " primary key (TRACK_ID, OPER_DATE)";
-      $query .= ");";
-      SQLExec($query);
-   }
-   else
-   {
-      SQLExec("create table TMP_POST_PROXY as select * from POST_PROXY");
-      SQLExec("create table TMP_POST_MAIL as select * from POST_MAIL");
-      SQLExec("create table TMP_POST_TRACK as select * from POST_TRACK");
-      SQLExec("create table TMP_POST_TRACKINFO as select * from POST_TRACKINFO");
-
-      SQLExec("drop table if exists POST_PROXY");
-      SQLExec("drop table if exists POST_MAIL");
-      SQLExec("drop table if exists POST_TRACKINFO");
-      SQLExec("drop table if exists POST_TRACK");
-
-      $query = "create table POST_PROXY(";
-      $query .= " FLAG_PROXY           VARCHAR(1) not null default 'N',";
-      $query .= " PROXY_HOST           VARCHAR(64),";
-      $query .= " PROXY_PORT           VARCHAR(4),";
-      $query .= " PROXY_USER           VARCHAR(64),";
-      $query .= " PROXY_PASSWD         VARCHAR(64),";
-      $query .= " LM_DATE              DATETIME not null,";
-      $query .= " primary key (FLAG_PROXY)";
-      $query .= " );";
-      SQLExec($query);
-
-      $query = "insert into POST_PROXY(FLAG_PROXY, PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASSWD, LM_DATE)";
-      $query .= " select * from TMP_POST_PROXY;";
-      SQLExec($query);
-
-      $query = "create table POST_MAIL(";
-      $query .= " FLAG_SEND            VARCHAR(1) not null default 'N',";
-      $query .= " LM_DATE              DATETIME not null,";
-      $query .= " NOTIFY_EMAIL         VARCHAR(64),";
-      $query .= " NOTIFY_SUBJ          VARCHAR(255),";
-      $query .= " primary key (FLAG_SEND)";
-      $query .= " );";
-      SQLExec($query);
-
-      $query = "insert into POST_MAIL(FLAG_SEND, LM_DATE, NOTIFY_EMAIL, NOTIFY_SUBJ)";
-      $query .= " select * from POST_MAIL;";
-      SQLExec($query);
-
-      $query = " create table POST_TRACK(";
-      $query .= " TRACK_ID             VARCHAR(14) not null,";
-      $query .= " TRACK_NAME           VARCHAR(64) not null,";
-      $query .= " FLAG_CHECK           VARCHAR(1) not null default 'Y',";
-      $query .= " TRACK_DATE           DATETIME not null,";
-      $query .= " LM_DATE              DATETIME not null,";
-      $query .= " primary key (TRACK_ID)";
-      $query .= " );";
-      SQLExec($query);
-
-      $query = " insert into POST_TRACK(TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE, LM_DATE)";
-      $query .= " select * from TMP_POST_TRACK;");
-      SQLExec($query);
-
-      $query = "create table POST_TRACKINFO(";
-      $query .= " TRACK_ID             VARCHAR(14) not null,";
-      $query .= " OPER_DATE            DATETIME not null,";
-      $query .= " OPER_TYPE            INT(10) not null,";
-      $query .= " OPER_NAME            VARCHAR(64) not null,";
-      $query .= " ATTRIB_ID            INT(10),";
-      $query .= " ATTRIB_NAME          VARCHAR(64),";
-      $query .= " OPER_POSTCODE        INT(10),";
-      $query .= " OPER_POSTPLACE       VARCHAR(64) not null,";
-      $query .= " ITEM_WEIGHT          DECIMAL(10,6),";
-      $query .= " DECLARED_VALUE       DECIMAL(10,6),";
-      $query .= " DELIVERY_PRICE       DECIMAL(10,6),";
-      $query .= " DESTINATION_POSTCODE INT(10),";
-      $query .= " DELIVERY_ADDRESS     VARCHAR(255),";
-      $query .= " LM_DATE              DATETIME not null,";
-      $query .= " primary key (TRACK_ID, OPER_DATE)";
-      $query .= " );";
-      SQLExec($query);
-      
-      $query = "insert into POST_TRACKINFO(TRACK_ID, OPER_DATE, OPER_TYPE, OPER_NAME, ATTRIB_ID, ATTRIB_NAME, OPER_POSTCODE, OPER_POSTPLACE, ITEM_WEIGHT, DECLARED_VALUE, DELIVERY_PRICE, DESTINATION_POSTCODE, DELIVERY_ADDRESS, LM_DATE)";
-      $query .= " select * from TMP_POST_TRACKINFO;";
-      SQLExec($query);
+   
    }
    
    /**
@@ -465,8 +326,147 @@ class app_postoffice extends module
     */
    function dbInstall($data) 
    {
+      if (!file_exists(DIR_MODULES . $this->name . "/installed")) 
+      {
+         SQLExec("drop table if exists POST_PROXY");
+         SQLExec("drop table if exists POST_MAIL");
+         SQLExec("drop table if exists POST_TRACKINFO");
+         SQLExec("drop table if exists POST_TRACK");
+
+         $query = "create table POST_PROXY(";
+         $query .+ "  FLAG_PROXY           VARCHAR(1) not null default 'N',";
+         $query .+ "  PROXY_HOST           VARCHAR(64),";
+         $query .+ "  PROXY_PORT           VARCHAR(4),";
+         $query .+ "  PROXY_USER           VARCHAR(64),";
+         $query .+ "  PROXY_PASSWD         VARCHAR(64),";
+         $query .+ "  LM_DATE              DATETIME not null,";
+         $query .+ "  primary key (FLAG_PROXY)";
+         $query .+ "  );";
+         SQLExec($query);
+
+         $query = "insert into POST_PROXY(FLAG_PROXY, PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASSWD, LM_DATE)";
+         $query .= "values('N', NULL, NULL, NULL, NULL, NOW());";
+         SQLExec($query);
+
+         $query = "create table POST_MAIL(";
+         $query .= " FLAG_SEND            VARCHAR(1) not null default 'N',";
+         $query .= " LM_DATE              DATETIME not null,";
+         $query .= " NOTIFY_EMAIL         VARCHAR(64),";
+         $query .= " NOTIFY_SUBJ          VARCHAR(255),";
+         $query .= " primary key (FLAG_SEND)";
+         $query .= ");";
+         SQLExec($query);
+
+         $query = "insert into POST_MAIL(FLAG_SEND, LM_DATE, NOTIFY_EMAIL, NOTIFY_SUBJ)";
+         $query .= " values('N', NOW(), NULL, NULL);";
+         SQLExec($query);
+
+         $query = "create table POST_TRACK(";
+         $query .= " TRACK_ID             VARCHAR(14) not null,";
+         $query .= " TRACK_NAME           VARCHAR(64) not null,";
+         $query .= " FLAG_CHECK           VARCHAR(1) not null default 'Y',";
+         $query .= " TRACK_DATE           DATETIME not null,";
+         $query .= " LM_DATE              DATETIME not null,";
+         $query .= " primary key (TRACK_ID)";
+         $query .= ");";
+         SQLExec($query);
+
+         $query = "create table POST_TRACKINFO(";
+         $query .= " TRACK_ID             VARCHAR(14) not null,";
+         $query .= " OPER_DATE            DATETIME not null,";
+         $query .= " OPER_TYPE            INT(10) not null,";
+         $query .= " OPER_NAME            VARCHAR(64) not null,";
+         $query .= " ATTRIB_ID            INT(10),";
+         $query .= " ATTRIB_NAME          VARCHAR(64),";
+         $query .= " OPER_POSTCODE        INT(10),";
+         $query .= " OPER_POSTPLACE       VARCHAR(64) not null,";
+         $query .= " ITEM_WEIGHT          DECIMAL(10,6),";
+         $query .= " DECLARED_VALUE       DECIMAL(10,6),";
+         $query .= " DELIVERY_PRICE       DECIMAL(10,6),";
+         $query .= " DESTINATION_POSTCODE INT(10),";
+         $query .= " DELIVERY_ADDRESS     VARCHAR(255),";
+         $query .= " LM_DATE              DATETIME not null,";
+         $query .= " primary key (TRACK_ID, OPER_DATE)";
+         $query .= ");";
+         SQLExec($query);
+      }
+      else
+      {
+         SQLExec("create table TMP_POST_PROXY as select * from POST_PROXY");
+         SQLExec("create table TMP_POST_MAIL as select * from POST_MAIL");
+         SQLExec("create table TMP_POST_TRACK as select * from POST_TRACK");
+         SQLExec("create table TMP_POST_TRACKINFO as select * from POST_TRACKINFO");
+
+         SQLExec("drop table if exists POST_PROXY");
+         SQLExec("drop table if exists POST_MAIL");
+         SQLExec("drop table if exists POST_TRACKINFO");
+         SQLExec("drop table if exists POST_TRACK");
+
+         $query = "create table POST_PROXY(";
+         $query .= " FLAG_PROXY           VARCHAR(1) not null default 'N',";
+         $query .= " PROXY_HOST           VARCHAR(64),";
+         $query .= " PROXY_PORT           VARCHAR(4),";
+         $query .= " PROXY_USER           VARCHAR(64),";
+         $query .= " PROXY_PASSWD         VARCHAR(64),";
+         $query .= " LM_DATE              DATETIME not null,";
+         $query .= " primary key (FLAG_PROXY)";
+         $query .= " );";
+         SQLExec($query);
+
+         $query = "insert into POST_PROXY(FLAG_PROXY, PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASSWD, LM_DATE)";
+         $query .= " select * from TMP_POST_PROXY;";
+         SQLExec($query);
+
+         $query = "create table POST_MAIL(";
+         $query .= " FLAG_SEND            VARCHAR(1) not null default 'N',";
+         $query .= " LM_DATE              DATETIME not null,";
+         $query .= " NOTIFY_EMAIL         VARCHAR(64),";
+         $query .= " NOTIFY_SUBJ          VARCHAR(255),";
+         $query .= " primary key (FLAG_SEND)";
+         $query .= " );";
+         SQLExec($query);
+
+         $query = "insert into POST_MAIL(FLAG_SEND, LM_DATE, NOTIFY_EMAIL, NOTIFY_SUBJ)";
+         $query .= " select * from POST_MAIL;";
+         SQLExec($query);
+
+         $query = " create table POST_TRACK(";
+         $query .= " TRACK_ID             VARCHAR(14) not null,";
+         $query .= " TRACK_NAME           VARCHAR(64) not null,";
+         $query .= " FLAG_CHECK           VARCHAR(1) not null default 'Y',";
+         $query .= " TRACK_DATE           DATETIME not null,";
+         $query .= " LM_DATE              DATETIME not null,";
+         $query .= " primary key (TRACK_ID)";
+         $query .= " );";
+         SQLExec($query);
+
+         $query = " insert into POST_TRACK(TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE, LM_DATE)";
+         $query .= " select * from TMP_POST_TRACK;");
+         SQLExec($query);
+
+         $query = "create table POST_TRACKINFO(";
+         $query .= " TRACK_ID             VARCHAR(14) not null,";
+         $query .= " OPER_DATE            DATETIME not null,";
+         $query .= " OPER_TYPE            INT(10) not null,";
+         $query .= " OPER_NAME            VARCHAR(64) not null,";
+         $query .= " ATTRIB_ID            INT(10),";
+         $query .= " ATTRIB_NAME          VARCHAR(64),";
+         $query .= " OPER_POSTCODE        INT(10),";
+         $query .= " OPER_POSTPLACE       VARCHAR(64) not null,";
+         $query .= " ITEM_WEIGHT          DECIMAL(10,6),";
+         $query .= " DECLARED_VALUE       DECIMAL(10,6),";
+         $query .= " DELIVERY_PRICE       DECIMAL(10,6),";
+         $query .= " DESTINATION_POSTCODE INT(10),";
+         $query .= " DELIVERY_ADDRESS     VARCHAR(255),";
+         $query .= " LM_DATE              DATETIME not null,";
+         $query .= " primary key (TRACK_ID, OPER_DATE)";
+         $query .= " );";
+         SQLExec($query);
       
-   
+         $query = "insert into POST_TRACKINFO(TRACK_ID, OPER_DATE, OPER_TYPE, OPER_NAME, ATTRIB_ID, ATTRIB_NAME, OPER_POSTCODE, OPER_POSTPLACE, ITEM_WEIGHT, DECLARED_VALUE, DELIVERY_PRICE, DESTINATION_POSTCODE, DELIVERY_ADDRESS, LM_DATE)";
+         $query .= " select * from TMP_POST_TRACKINFO;";
+         SQLExec($query);
+      }
    }
    
    function GetLastCheckedTracks()
