@@ -404,8 +404,8 @@ class app_postoffice extends module
          
          try
          {
-            $res = SQLExec("select count(FLAG_PROXY) from POST_PROXY)"); 
-            $log->debug($res);
+            $res = SQLExec("select count(FLAG_PROXY) from POST_PROXY"); 
+            $log->debug("count is:  " . $res);
          }
          catch(Exception $e)
          {
