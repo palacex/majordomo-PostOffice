@@ -302,16 +302,8 @@ class app_postoffice extends module
    function install($parent_name = '')
    {
       //parent::install(); 
-      try 
-      {
-         $val = SQLExec("select 1 from POST_PROXY");
-         $val = TRUE;
-      }
-      catch(Exception $ex)
-      {
-         $val = FALSE;
-      }
-      
+      $val = SQLSelectOne("select count(*)+2 CNT from information_schema.tables where table_schema = '" . DB_NAME . "' and table_name = 'POST_TRACK'");
+      $val = $val["CNT"] == 2 ? FALSE : TRUE;
       
       
       if (!file_exists(DIR_MODULES . $this->name . "/installed") && $val == FALSE) 
