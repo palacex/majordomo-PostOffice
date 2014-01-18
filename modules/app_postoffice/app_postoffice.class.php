@@ -301,7 +301,7 @@ class app_postoffice extends module
     */
    function install($parent_name = '')
    {
-      //parent::install(); 
+      
       $val = SQLSelectOne("select count(*)+2 CNT from information_schema.tables where table_schema = '" . DB_NAME . "' and table_name = 'POST_TRACK'");
       $val = $val["CNT"] == 2 ? FALSE : TRUE;
       
@@ -459,6 +459,8 @@ class app_postoffice extends module
          SQLExec("drop table if exists TMP_POST_TRACK");
          SQLExec("drop table if exists TMP_POST_TRACKINFO");
       }
+      
+      parent::install(); 
    
    }
    
