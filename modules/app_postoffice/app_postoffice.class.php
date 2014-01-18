@@ -370,6 +370,11 @@ class app_postoffice extends module
       }
       else
       {
+         SQLExec("drop table if exists TMP_POST_PROXY");
+         SQLExec("drop table if exists TMP_POST_MAIL");
+         SQLExec("drop table if exists TMP_POST_TRACK");
+         SQLExec("drop table if exists TMP_POST_TRACKINFO");
+         
          SQLExec("create table TMP_POST_PROXY as select * from POST_PROXY");
          SQLExec("create table TMP_POST_MAIL as select * from POST_MAIL");
          SQLExec("create table TMP_POST_TRACK as select * from POST_TRACK");
