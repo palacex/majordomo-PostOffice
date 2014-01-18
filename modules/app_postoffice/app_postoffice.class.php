@@ -302,7 +302,9 @@ class app_postoffice extends module
    function install($parent_name = '')
    {
       //parent::install(); 
-      if (!file_exists(DIR_MODULES . $this->name . "/installed")) 
+      $val = SQLExec("select 1 from POST_PROXY");
+      
+      if (!file_exists(DIR_MODULES . $this->name . "/installed") && $val == FALSE) 
       {
          SQLExec("drop table if exists POST_PROXY");
          SQLExec("drop table if exists POST_MAIL");
@@ -399,22 +401,6 @@ class app_postoffice extends module
          $query = "insert into POST_PROXY(FLAG_PROXY, PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASSWD, LM_DATE)";
          $query .= " select * from TMP_POST_PROXY;";
          SQLExec($query);
-         
-         $log = Logger::getLogger(__METHOD__); 
-         
-         try
-         {
-            $res = SQLExec("select count(FLAG_PROXY) from POST_PROXY"); 
-            $log->debug("count is:  " . $res);
-         }
-         catch(Exception $e)
-         {
-            $log->debug($e->message);
-         }
-         /* $query = "insert into POST_PROXY(FLAG_PROXY, PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASSWD, LM_DATE)";
-         $query .= "values('N', NULL, NULL, NULL, NULL, NOW());";
-         SQLExec($query);
-         */
 
          $query = "create table POST_MAIL(";
          $query .= " FLAG_SEND            VARCHAR(1) not null default 'N',";
@@ -426,7 +412,7 @@ class app_postoffice extends module
          SQLExec($query);
 
          $query = "insert into POST_MAIL(FLAG_SEND, LM_DATE, NOTIFY_EMAIL, NOTIFY_SUBJ)";
-         $query .= " select * from POST_MAIL;";
+         $query .= " select * from TMP_POST_MAIL;";
          SQLExec($query);
 
          $query = " create table POST_TRACK(";
@@ -465,6 +451,11 @@ class app_postoffice extends module
          $query = "insert into POST_TRACKINFO(TRACK_ID, OPER_DATE, OPER_TYPE, OPER_NAME, ATTRIB_ID, ATTRIB_NAME, OPER_POSTCODE, OPER_POSTPLACE, ITEM_WEIGHT, DECLARED_VALUE, DELIVERY_PRICE, DESTINATION_POSTCODE, DELIVERY_ADDRESS, LM_DATE)";
          $query .= " select * from TMP_POST_TRACKINFO;";
          SQLExec($query);
+         
+         SQLExec("drop table if exists TMP_POST_PROXY");
+         SQLExec("drop table if exists TMP_POST_MAIL");
+         SQLExec("drop table if exists TMP_POST_TRACK");
+         SQLExec("drop table if exists TMP_POST_TRACKINFO");
       }
    
    }
