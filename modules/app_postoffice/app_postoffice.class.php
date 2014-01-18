@@ -302,7 +302,17 @@ class app_postoffice extends module
    function install($parent_name = '')
    {
       //parent::install(); 
-      $val = SQLExec("select 1 from POST_PROXY");
+      try 
+      {
+         $val = SQLExec("select 1 from POST_PROXY");
+         $val = TRUE;
+      }
+      catch(Exception $ex)
+      {
+         $val = FALSE;
+      }
+      
+      
       
       if (!file_exists(DIR_MODULES . $this->name . "/installed") && $val == FALSE) 
       {
