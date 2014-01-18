@@ -310,14 +310,14 @@ class app_postoffice extends module
          SQLExec("drop table if exists POST_TRACK");
 
          $query = "create table POST_PROXY(";
-         $query .+ "  FLAG_PROXY           VARCHAR(1) not null default 'N',";
-         $query .+ "  PROXY_HOST           VARCHAR(64),";
-         $query .+ "  PROXY_PORT           VARCHAR(4),";
-         $query .+ "  PROXY_USER           VARCHAR(64),";
-         $query .+ "  PROXY_PASSWD         VARCHAR(64),";
-         $query .+ "  LM_DATE              DATETIME not null,";
-         $query .+ "  primary key (FLAG_PROXY)";
-         $query .+ "  );";
+         $query .= "  FLAG_PROXY           VARCHAR(1) not null default 'N',";
+         $query .= "  PROXY_HOST           VARCHAR(64),";
+         $query .= "  PROXY_PORT           VARCHAR(4),";
+         $query .= "  PROXY_USER           VARCHAR(64),";
+         $query .= "  PROXY_PASSWD         VARCHAR(64),";
+         $query .= "  LM_DATE              DATETIME not null,";
+         $query .= "  primary key (FLAG_PROXY)";
+         $query .= "  );";
          SQLExec($query);
 
          $query = "insert into POST_PROXY(FLAG_PROXY, PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASSWD, LM_DATE)";
