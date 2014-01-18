@@ -365,6 +365,8 @@ class app_postoffice extends module
          $query .= " primary key (TRACK_ID, OPER_DATE)";
          $query .= ");";
          SQLExec($query);
+         
+         SaveFile(DIR_MODULES . $this->name  ."/installed", date("H:m d.M.Y"));
       }
       else
       {
