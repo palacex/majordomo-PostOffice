@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Почта России</title>
+</head>
+<body>
+   <table>
+      <tr>
+         <th>Трек номер</th>
+         <th>Название трека</th>
+         <th>Дата операции</th>
+         <th>Наименование операции</th>
+         <th>Местонахождение</th>
+      </tr>
+      {{loop}}
+      <tr>
+         <td>{{TRACK_ID}}</td>
+         <td>{{TRACK_NAME}}</td>
+         <td>{{OPER_DATE}}</td>
+         <td>{{ATTRIB_NAME}}</td>
+         <td>{{OPER_POSTPLACE}}</td>
+      </tr>
+      {{end_loop}}
+   </table>
+</body>
+</html>

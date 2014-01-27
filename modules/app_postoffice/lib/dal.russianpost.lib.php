@@ -50,7 +50,7 @@ namespace DAL
                                                             )
                                         ) a
                                 ) as pinfo 
-                          using (TRACK_ID)
+                          using (TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE)
                  order by OPER_DATE desc, LM_DATE desc";
          
          $track = SQLSelect($query);

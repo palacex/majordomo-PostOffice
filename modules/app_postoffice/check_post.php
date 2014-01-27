@@ -30,6 +30,29 @@ catch(Exception $e)
    $log->error("PostOffice Error: " . $e->getMessage());
 }
 
+function GetMailTemplateHeader($template, $beginLoop)
+{
+   return substr($template, 0, strpos($template,$beginLoop));
+}
+
+function GetMailTemplateLoop($template, $beginLoop, $endLoop)
+{
+   
+   $from = strpos($template, $beginLoop) + strlen($beginLoop);
+   $to   = strpos($template, $endLoop);
+
+   $loopStr = substr($template, $from, $to);
+   $to      = strpos($loopStr, $endLoop);
+   $loopStr = substr($loopStr, 0, $to);
+
+   return $loopStr;
+}
+
+function GetMailTemplateFooter($template, $endLoop)
+{
+   return substr($template,  strpos($template, $endLoop) + strlen($endLoop), strlen($template));
+}
+
 function GetTrackInfoForNotify()
 {
    $message = "";
@@ -43,31 +66,31 @@ function GetTrackInfoForNotify()
    if (count($tracks) == 0)
       return $message;
    
-   $mailBody .= "<table>";
-   $mailBody .= "<tr>";
-   $mailBody .="<th>Трек номер</th>";
-   $mailBody .="<th>Название трека</th>";
-   $mailBody .="<th>Дата операции</th>";
-   $mailBody .="<th>Наименование операции</th>";
-   $mailBody .="<th>Местонахождение</th>";
-   $mailBody .= "</tr>";
+
+   $template = file_get_contents(dirname(__FILE__) . "/mail_template.html");
+   $beginLoop = "{{loop}}";
+   $endLoop = "{{end_loop}}";
+
+   $header = GetMailTemplateHeader($template, $beginLoop);
+   $footer = GetMailTemplateFooter($template, $endLoop);
+   $loopString = GetMailTemplateLoop($template, $beginLoop, $endLoop);
+   $list = "";
+   
    foreach ($tracks as $track)
    {
-      $mailBody .= "<tr>";
-      $mailBody .="<td>" . $track['TRACK_ID']       . "</td>";
-      $mailBody .="<td>" . $track['TRACK_NAME']     . "</td>";
-      $mailBody .="<td>" . $track['OPER_DATE']      . "</td>";
-      $mailBody .="<td>" . $track['ATTRIB_NAME']    . "</td>";
-      $mailBody .="<td>" . $track['OPER_POSTPLACE'] . "</td>";
-      $mailBody .= "</tr>";
+      $curStr = str_replace("{{TRACK_ID}}", $track['TRACK_ID'], $loopString);
+      $curStr = str_replace("{{TRACK_NAME}}", $track['TRACK_NAME'], $curStr);
+      $curStr = str_replace("{{OPER_DATE}}", $track['OPER_DATE'], $curStr);
+      $curStr = str_replace("{{ATTRIB_NAME}}", $track['ATTRIB_NAME'], $curStr);
+      $curStr = str_replace("{{OPER_POSTPLACE}}", $track['OPER_POSTPLACE'], $curStr);
+      $list .= $curStr;
    }
    
-   $mailBody .= "</table>";
-   
-   $message = $mailBody;
+   $message = $header . $trackList . $footer;
    
    return $message;
 }
+
 
 function SendResultToClient()
 {
