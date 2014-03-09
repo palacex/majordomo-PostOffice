@@ -321,7 +321,7 @@ class app_postoffice extends module
          $query .= "  PROXY_PASSWD         VARCHAR(64),";
          $query .= "  LM_DATE              DATETIME not null,";
          $query .= "  primary key (FLAG_PROXY)";
-         $query .= "  );";
+         $query .= "  ) ENGINE=InnoDB CHARACTER SET=utf8;";
          SQLExec($query);
 
          $query = "insert into POST_PROXY(FLAG_PROXY, PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASSWD, LM_DATE)";
@@ -334,7 +334,7 @@ class app_postoffice extends module
          $query .= " NOTIFY_EMAIL         VARCHAR(64),";
          $query .= " NOTIFY_SUBJ          VARCHAR(255),";
          $query .= " primary key (FLAG_SEND)";
-         $query .= ");";
+         $query .= ") ENGINE=InnoDB CHARACTER SET=utf8;";
          SQLExec($query);
 
          $query = "insert into POST_MAIL(FLAG_SEND, LM_DATE, NOTIFY_EMAIL, NOTIFY_SUBJ)";
@@ -348,7 +348,7 @@ class app_postoffice extends module
          $query .= " TRACK_DATE           DATETIME not null,";
          $query .= " LM_DATE              DATETIME not null,";
          $query .= " primary key (TRACK_ID)";
-         $query .= ");";
+         $query .= ") ENGINE=InnoDB CHARACTER SET=utf8;";
          SQLExec($query);
 
          $query = "create table POST_TRACKINFO(";
@@ -367,7 +367,7 @@ class app_postoffice extends module
          $query .= " DELIVERY_ADDRESS     VARCHAR(255),";
          $query .= " LM_DATE              DATETIME not null,";
          $query .= " primary key (TRACK_ID, OPER_DATE)";
-         $query .= ");";
+         $query .= ") ENGINE=InnoDB CHARACTER SET=utf8;";
          SQLExec($query);
          
          SaveFile(DIR_MODULES . $this->name  ."/installed", date("H:m d.M.Y"));
@@ -397,7 +397,7 @@ class app_postoffice extends module
          $query .= " PROXY_PASSWD         VARCHAR(64),";
          $query .= " LM_DATE              DATETIME not null,";
          $query .= " primary key (FLAG_PROXY)";
-         $query .= " );";
+         $query .= " ) ENGINE=InnoDB CHARACTER SET=utf8;";
          SQLExec($query);
 
          $query = "insert into POST_PROXY(FLAG_PROXY, PROXY_HOST, PROXY_PORT, PROXY_USER, PROXY_PASSWD, LM_DATE)";
@@ -410,7 +410,7 @@ class app_postoffice extends module
          $query .= " NOTIFY_EMAIL         VARCHAR(64),";
          $query .= " NOTIFY_SUBJ          VARCHAR(255),";
          $query .= " primary key (FLAG_SEND)";
-         $query .= " );";
+         $query .= " ) ENGINE=InnoDB CHARACTER SET=utf8;";
          SQLExec($query);
 
          $query = "insert into POST_MAIL(FLAG_SEND, LM_DATE, NOTIFY_EMAIL, NOTIFY_SUBJ)";
@@ -424,7 +424,7 @@ class app_postoffice extends module
          $query .= " TRACK_DATE           DATETIME not null,";
          $query .= " LM_DATE              DATETIME not null,";
          $query .= " primary key (TRACK_ID)";
-         $query .= " );";
+         $query .= " ) ENGINE=InnoDB CHARACTER SET=utf8;";
          SQLExec($query);
 
          $query = " insert into POST_TRACK(TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE, LM_DATE)";
@@ -447,7 +447,7 @@ class app_postoffice extends module
          $query .= " DELIVERY_ADDRESS     VARCHAR(255),";
          $query .= " LM_DATE              DATETIME not null,";
          $query .= " primary key (TRACK_ID, OPER_DATE)";
-         $query .= " );";
+         $query .= " ) ENGINE=InnoDB CHARACTER SET=utf8;";
          SQLExec($query);
          
          $query = "insert into POST_TRACKINFO(TRACK_ID, OPER_DATE, OPER_TYPE, OPER_NAME, ATTRIB_ID, ATTRIB_NAME, OPER_POSTCODE, OPER_POSTPLACE, ITEM_WEIGHT, DECLARED_VALUE, DELIVERY_PRICE, DESTINATION_POSTCODE, DELIVERY_ADDRESS, LM_DATE)";
