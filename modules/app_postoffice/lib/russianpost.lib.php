@@ -67,12 +67,14 @@ class RussianPostAPI
    public function getOperationHistory($trackingNumber) 
    {
       $trackingNumber = trim($trackingNumber);
+     
       if (!preg_match('/^[0-9]{14}|[A-Z]{2}[0-9]{9}[A-Z]{2}$/', $trackingNumber)) 
       {
          throw new RussianPostArgumentException('Incorrect format of tracking number: ' . $trackingNumber);
       }
-
+     
       $data = $this->makeRequest($trackingNumber);
+      DebMes($data);
       $data = $this->parseResponse($data);
 
       return $data;
@@ -86,11 +88,13 @@ class RussianPostAPI
          throw new RussianPostDataException("Failed to parse XML response");
 
       $ns = $xml->getNamespaces(true);
+     
+      
       if (!($xml->children($ns['S'])->Body &&
-            $records = $xml->children($ns['S'])->Body->children($ns['ns3'])->OperationHistoryData->historyRecord
+           $records = $xml->children($ns['S'])->Body->children($ns['ns2'])->OperationHistoryData->historyRecord
            ))
          throw new RussianPostDataException("There is no tracking data in XML response");
-
+      
       $out = array();
       foreach($records as $rec) 
       {
