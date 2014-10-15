@@ -20,7 +20,7 @@ namespace DAL
       {
          $track = array();
          
-         $query = "select TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE, LM_DATE
+         $query = "select TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE, LM_DATE, TRACK_URL
                      from POST_TRACK
                  order by LM_DATE desc;";
          
@@ -38,9 +38,9 @@ namespace DAL
          $track = array();
          $query = "select *
                      from POST_TRACK
-                     left  join (select a.TRACK_ID, a.TRACK_NAME,  a.FLAG_CHECK,  a.TRACK_DATE, a.LM_TRACK,
+                     left  join (select a.TRACK_ID, a.TRACK_NAME,  a.FLAG_CHECK,  a.TRACK_DATE, a.LM_TRACK, a.TRACK_URL,
                                         a.OPER_DATE, a.ATTRIB_NAME, a.OPER_POSTPLACE, a.OPER_NAME, a.LM_INFO
-                                   from (select t.TRACK_ID, t.TRACK_NAME,  t.FLAG_CHECK,  t.TRACK_DATE, t.LM_DATE LM_TRACK,
+                                   from (select t.TRACK_ID, t.TRACK_NAME,  t.FLAG_CHECK,  t.TRACK_DATE, t.LM_DATE LM_TRACK, t.TRACK_URL,
                                                 i.OPER_DATE, i.ATTRIB_NAME, i.OPER_POSTPLACE, i.OPER_NAME, i.LM_DATE LM_INFO
                                            from POST_TRACKINFO i , POST_TRACK t
                                           where t.TRACK_ID = i.TRACK_ID
@@ -50,7 +50,7 @@ namespace DAL
                                                             )
                                         ) a
                                 ) as pinfo 
-                          using (TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE)
+                          using (TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE, TRACK_URL)
                  order by OPER_DATE desc, LM_DATE desc";
          
          $track = SQLSelect($query);
@@ -60,14 +60,12 @@ namespace DAL
       
       /**
        * Return track numbers array with flag
-       * @param $userID User_ID
-       * @param $checkFlag CheckFlag
+       * @param $checkFlag char CheckFlag
        * @return array
        */
-      public static function SelectTrackByFlag
-        ($checkFlag)
+      public static function SelectTrackByFlag($checkFlag)
       {
-         $query = "select TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE
+         $query = "select TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE, TRACK_URL
                      from POST_TRACK
                     where FLAG_CHECK = '" . $checkFlag . "'
                  order by TRACK_DATE desc;";
@@ -79,11 +77,10 @@ namespace DAL
       
       /**
        * Return track status(active/inactive) by track number
-       * @param $trackID TrackNumber
+       * @param $trackID string TrackNumber
        * @return Y/N check status
        */
-      public static function GetTrackStatusByID
-        ($trackID)
+      public static function GetTrackStatusByID($trackID)
       {
          $query = "select FLAG_CHECK
                      from POST_TRACK
@@ -98,11 +95,10 @@ namespace DAL
       
       /**
        * Update track check status
-       * @param $trackID TrackNumber
+       * @param $trackID string TrackNumber
        * @return true/false
        */
-      public static function UpdateTrackStatus
-        ($trackID)
+      public static function UpdateTrackStatus($trackID)
       {
          if ($trackID == null) return false;                                    // track number not found
          
@@ -123,11 +119,10 @@ namespace DAL
       
       /**
        * Delete track number
-       * @param $trackID TrackNumber
+       * @param $trackID string TrackNumber
        * @return true/false
        */
-      public static function DeleteTrack
-        ($trackID)
+      public static function DeleteTrack($trackID)
       {
          $query = "delete  
                      from POST_TRACK
@@ -141,8 +136,7 @@ namespace DAL
        * @param $trackID Track number
        * @return
        */
-      public static function DeleteTrackDetailByID
-        ($trackID)
+      public static function DeleteTrackDetailByID($trackID)
       {
          $query = "delete  
                      from POST_TRACKINFO
@@ -153,13 +147,12 @@ namespace DAL
       
       /**
        * Add track to database
-       * @param $trackID TrackNumber
-       * @param $trackName TrackName
+       * @param $trackID string TrackNumber
+       * @param $trackName string TrackName
+       * @param $trackInfoUrl string Информация о посылке
        * @return
        */
-      public static function AddTrack
-        ($trackID,
-         $trackName)
+      public static function AddTrack($trackID, $trackName, $trackInfoUrl)
       {
          if ($trackID       == null) return false;                    // трек номер не указан
          if ($trackName     == null) return false;                    // название трека не указано
@@ -172,6 +165,7 @@ namespace DAL
          $rec["FLAG_CHECK"] = "Y";
          $rec["TRACK_DATE"] = $RequestDate;
          $rec["LM_DATE"]    = $RequestDate;
+         $rec["TRACK_URL"]  = urlencode($trackInfoUrl);
          
          $res = SQLInsert("POST_TRACK", $rec);
          
@@ -195,20 +189,8 @@ namespace DAL
        * @param $destinationAddress          DestinationAddress
        * @return                             Result(true/false)
        */
-      public static function AddTrackDetail
-        ($trackID,
-         $operationDate,
-         $operationTypeID,
-         $operationTypeName,
-         $operationAttributeID,
-         $operationAttribute,
-         $operationPlacePostalCode,
-         $operationPlaceName,
-         $itemWeight,
-         $declaredValue,
-         $collectOnDeliveryPrice,
-         $destinationPostalCode,
-         $destinationAddress)
+      public static function AddTrackDetail($trackID, $operationDate, $operationTypeID, $operationTypeName, $operationAttributeID, $operationAttribute, $operationPlacePostalCode, $operationPlaceName, $itemWeight, 
+         $declaredValue, $collectOnDeliveryPrice, $destinationPostalCode, $destinationAddress)
       {
          if (!isset($trackID))            return false;                    // track number not exist
          if (!isset($operationDate))      return false;                    // operation date not exist
@@ -249,11 +231,10 @@ namespace DAL
       
       /**
        * Select short detail about last track position
-       * @param $trackID TrackNumber
+       * @param $trackID string TrackNumber
        * @return array
        */
-      public static function SelectTrackLastInfoByID
-        ($trackID)
+      public static function SelectTrackLastInfoByID($trackID)
       {
          $query = "select OPER_DATE, ATTRIB_NAME, OPER_POSTPLACE, OPER_NAME
                      from POST_TRACKINFO
@@ -269,13 +250,11 @@ namespace DAL
       
       /**
        * Return true then trackinfo extist on current date
-       * @param $trackID   TrackNumber
+       * @param $trackID   string TrackNumber
        * @param $operDate  OperationDate
        * @return boolean
        */
-      public static function isTrackInfoExist
-        ($trackID,
-         $operDate)
+      public static function isTrackInfoExist($trackID, $operDate)
       {
          $query = "select count(*) CNT
                            from POST_TRACKINFO 

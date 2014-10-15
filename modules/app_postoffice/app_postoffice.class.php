@@ -9,7 +9,7 @@ use DAL\RussianPostDAL as RussianPost;
  *
  * @package PostOffice
  * @author LDV <dev@silvergate.ru>
- * @version 1.4
+ * @version 1.5
  */
 class app_postoffice extends module
 {
@@ -156,14 +156,15 @@ class app_postoffice extends module
             // Get TrackNumber form request
             $trackID   = isset($_REQUEST['trackid'])   ? $_REQUEST['trackid']    : null;
             $trackName = isset($_REQUEST['trackname']) ? $_REQUEST['trackname']  : null;
+            $trackInfoUrl = isset($_REQUEST['trackurl']) ? $_REQUEST['trackurl']  : null;
             // Exit then TrackNumber does't exist.
             if ($trackID == null)
                throw new Exception("TrackNumber not found.");
             
             $trackName = $trackName == null ? $trackID : $trackName;
-            
+           
             //add TrackNumber to Database
-            RussianPost::AddTrack($trackID, $trackName);
+            RussianPost::AddTrack($trackID, $trackName, $trackInfoUrl);
             $url = "admin.php?pd=&md=panel&inst=&action=app_postoffice";
             header_remove();
             header("Location: " . $url, true);
@@ -347,6 +348,7 @@ class app_postoffice extends module
          $query .= " FLAG_CHECK           VARCHAR(1) not null default 'Y',";
          $query .= " TRACK_DATE           DATETIME not null,";
          $query .= " LM_DATE              DATETIME not null,";
+         $query .= " TRACK_URL            VARCHAR(255),";
          $query .= " primary key (TRACK_ID)";
          $query .= ") ENGINE=InnoDB CHARACTER SET=utf8;";
          SQLExec($query);
@@ -423,11 +425,12 @@ class app_postoffice extends module
          $query .= " FLAG_CHECK           VARCHAR(1) not null default 'Y',";
          $query .= " TRACK_DATE           DATETIME not null,";
          $query .= " LM_DATE              DATETIME not null,";
+         $query .= " TRACK_URL            VARCHAR(255),";
          $query .= " primary key (TRACK_ID)";
          $query .= " ) ENGINE=InnoDB CHARACTER SET=utf8;";
          SQLExec($query);
 
-         $query = " insert into POST_TRACK(TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE, LM_DATE)";
+         $query = " insert into POST_TRACK(TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE, LM_DATE, TRACK_URL)";
          $query .= " select * from TMP_POST_TRACK;";
          SQLExec($query);
 
@@ -503,6 +506,7 @@ class app_postoffice extends module
          $arr['TRACK_NAME']      = $track['TRACK_NAME'];
          $arr['FLAG_CHECK']      = $track['FLAG_CHECK'];
          $arr['TRACK_DATE']      = $track['TRACK_DATE'];
+         $arr['TRACK_URL']       = urldecode($track['TRACK_URL']);
          $arr['OPER_DATE']       = $track['OPER_DATE']; 
          $arr['OPER_NAME']       = $track['OPER_NAME']; 
          $arr['ATTRIB_NAME']     = $track['ATTRIB_NAME'];

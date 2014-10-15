@@ -9,13 +9,17 @@
       <div class="tab-pane active in" id="check">
          <div style="margin:1em 0;" class="row">
             <form class="form-inline" action="admin.php" method="post" enctype="multipart/form-data" id="TrackAddForm" role="form">
-               <div class="form-group col-xs-5" style="padding-left:0">
+               <div class="form-group col-xs-3" style="padding-left:0">
                   <label for="trackid" class="sr-only">Номер трека</label>
                   <input type="text" placeholder="Номер трека" name="trackid" class="form-control">
                </div>
-               <div class="form-group col-xs-5">
+               <div class="form-group col-xs-3">
                   <label for="trackname" class="sr-only">Название трека</label>
                   <input type="text" placeholder="Название трека" name="trackname" class="form-control">
+               </div>
+               <div class="form-group col-xs-3">
+                  <label for="trackurl" class="sr-only">Ссылка</label>
+                  <input type="text" placeholder="Ссылка" name="trackurl" class="form-control">
                </div>
                <div class="form-group col-xs-2">
                   <input type="hidden" name="act" value="add" />
@@ -38,6 +42,7 @@
                      <th>№</th>
                      <th>Трек номер</th>
                      <th>Название</th>
+                     <th>Ссылка</th>
                      <th>Дата</th>
                      <th>Состояние</th>
                      <th>Текущее местонахождение</th>
@@ -50,6 +55,7 @@
                      <td><#TRACK_LIST.TRACK_NUM#></td>
                      <td><#TRACK_LIST.TRACK_ID#></td>
                      <td><#TRACK_LIST.TRACK_NAME#></td>
+                     <td><a href="<#TRACK_LIST.TRACK_URL#>" target="_blank"><#TRACK_LIST.TRACK_URL#></a></td>
                      <td><#TRACK_LIST.OPER_DATE#></td>
                      <td><#TRACK_LIST.OPER_NAME#>: <#TRACK_LIST.ATTRIB_NAME#></td>
                      <td><#TRACK_LIST.OPER_POSTPLACE#></td>

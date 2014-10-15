@@ -5,6 +5,7 @@
             <th>№</th>
             <th>Трек номер</th>
             <th>Название</th>
+            <th>Ссылка</th>
             <th>Дата обновления</th>
             <th>Дата</th>
             <th>Состояние</th>
@@ -18,6 +19,7 @@
             <td><#TRACK_LIST.TRACK_NUM#></td>
             <td><#TRACK_LIST.TRACK_ID#></td>
             <td><#TRACK_LIST.TRACK_NAME#></td>
+            <td><a href="<#TRACK_LIST.TRACK_URL#>" target="_blank"><#TRACK_LIST.TRACK_URL#></a></td>
             <td><#TRACK_LIST.TRACK_DATE#></td>
             <td><#TRACK_LIST.OPER_DATE#></td>
             <td><#TRACK_LIST.OPER_NAME#>: <#TRACK_LIST.ATTRIB_NAME#></td>
@@ -25,7 +27,7 @@
             [#if $T.FLAG_CHECK=="Y"#]
             <td><span class="label label-success">Active</span></td>
             [#else#]
-            <td><span class="label">Inactive</span></td>
+            <td><span class="label label-default">Inactive</span></td>
             [#endif#]
          </tr>
          [#end TRACK_LIST#]
