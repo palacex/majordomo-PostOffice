@@ -353,6 +353,28 @@ namespace DAL
       }
       
       /**
+       * Check table for column exist
+       * @param $tableName string Table Name
+       * @param $tableColumn string Table Column
+       * @return bool
+       */
+      public static function isTableColumnExists($tableName, $tableColumn)
+      {
+         $query = "select count(*) CNT
+                     from information_schema.COLUMNS 
+                    where TABLE_SCHEMA = '" . DB_NAME . "' 
+                      and TABLE_NAME   = '" . $tableName . "' 
+                      and COLUMN_NAME  = '" . $tableColumn . "'";
+         
+         $result = SQLSelectOne($query);
+         
+         $columnCount = $result['CNT'];
+         
+         return $columnCount > 0;
+      }
+   
+      
+      /**
        * Get notify settings
        * @return array
        */

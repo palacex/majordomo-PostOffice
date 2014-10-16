@@ -430,6 +430,14 @@ class app_postoffice extends module
          $query .= " ) ENGINE=InnoDB CHARACTER SET=utf8;";
          SQLExec($query);
 
+         
+         $isTrackUrlExists = RussianPost::isTableColumnExists("TMP_POST_TRACK", "TRACK_URL");
+         if (!$isTrackUrlExists)
+         {
+            $query = "alter table TMP_POST_TRACK add column TRACK_URL varchar(255) after LM_DATE;'";
+            SQLExec($query);
+         }
+         
          $query = " insert into POST_TRACK(TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE, LM_DATE, TRACK_URL)";
          $query .= " select * from TMP_POST_TRACK;";
          SQLExec($query);
