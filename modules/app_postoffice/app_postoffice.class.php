@@ -434,7 +434,7 @@ class app_postoffice extends module
          $isTrackUrlExists = RussianPost::isTableColumnExists("TMP_POST_TRACK", "TRACK_URL");
          if (!$isTrackUrlExists)
          {
-            $query = "alter table TMP_POST_TRACK add column TRACK_URL varchar(255) after LM_DATE;'";
+            $query = "alter table TMP_POST_TRACK add column TRACK_URL varchar(255) after LM_DATE;";
             SQLExec($query);
          }
          
