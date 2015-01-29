@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Default language file for PostOffice application
  *
