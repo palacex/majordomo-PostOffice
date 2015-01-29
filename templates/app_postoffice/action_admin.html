@@ -1,25 +1,25 @@
-<h3>Почта Росссии - Отслеживание посылок</h3>
+<h3><#LANG_POSTOFFICE_APP_TITLE#></h3>
 <div class="well">
    <ul class="nav nav-tabs">
-      <li class="active"><a href="#check" data-toggle="tab">Проверка почты</a></li>
-      <li><a href="#proxy" data-toggle="tab">Настройка прокси</a></li>
-      <li><a href="#email" data-toggle="tab">Настройка уведомлений</a></li>
+      <li class="active"><a href="#check" data-toggle="tab"><#LANG_POSTOFFICE_TAB_CHECK#></a></li>
+      <li><a href="#proxy" data-toggle="tab"><#LANG_POSTOFFICE_TAB_PROXY#></a></li>
+      <li><a href="#email" data-toggle="tab"><#LANG_POSTOFFICE_TAB_NOTIFICATION#></a></li>
    </ul>
    <div id="myTabContent" class="tab-content">
       <div class="tab-pane active in" id="check">
          <div style="margin:1em 0;" class="row">
             <form class="form-inline" action="admin.php" method="post" enctype="multipart/form-data" id="TrackAddForm" role="form">
                <div class="form-group col-xs-3" style="padding-left:0">
-                  <label for="trackid" class="sr-only">Номер трека</label>
-                  <input type="text" placeholder="Номер трека" name="trackid" class="form-control">
+                  <label for="trackid" class="sr-only"><#LANG_POSTOFFICE_TRACK_NUMBER#></label>
+                  <input type="text" placeholder="<#LANG_POSTOFFICE_TRACK_NUMBER#>" name="trackid" class="form-control">
                </div>
                <div class="form-group col-xs-3">
-                  <label for="trackname" class="sr-only">Название трека</label>
-                  <input type="text" placeholder="Название трека" name="trackname" class="form-control">
+                  <label for="trackname" class="sr-only"><#LANG_POSTOFFICE_TRACK_NAME#></label>
+                  <input type="text" placeholder="<#LANG_POSTOFFICE_TRACK_NAME#>" name="trackname" class="form-control">
                </div>
                <div class="form-group col-xs-3">
-                  <label for="trackurl" class="sr-only">Ссылка</label>
-                  <input type="text" placeholder="Ссылка" name="trackurl" class="form-control">
+                  <label for="trackurl" class="sr-only"><#LANG_POSTOFFICE_TRACK_URL#></label>
+                  <input type="text" placeholder="<#LANG_POSTOFFICE_TRACK_URL#>" name="trackurl" class="form-control">
                </div>
                <div class="form-group col-xs-2">
                   <input type="hidden" name="act" value="add" />
@@ -27,12 +27,12 @@
                   <input type="hidden" name="md" value="panel" />
                   <input type="hidden" name="inst" value="" />
                   <input type="hidden" name="action" value="app_postoffice" />
-                  <button type="submit" name="postAdd" class="btn btn-primary input-medium">Добавить</button>
+                  <button type="submit" name="postAdd" class="btn btn-primary input-medium"><#LANG_POSTOFFICE_TRACK_ADD#></button>
                </div>
             </form>
          </div>
          <div class="row" style="margin-bottom:1em;">
-            <a href="#" role="button" class="btn btn-primary track-check">Проверить</a>
+            <a href="#" role="button" class="btn btn-primary track-check"><#LANG_POSTOFFICE_TRACK_CHECK#></a>
          </div>
 
          <div class="well">
@@ -40,12 +40,12 @@
                <thead>
                   <tr>
                      <th>№</th>
-                     <th>Трек номер</th>
-                     <th>Название</th>
-                     <th>Ссылка</th>
-                     <th>Дата</th>
-                     <th>Состояние</th>
-                     <th>Текущее местонахождение</th>
+                     <th><#LANG_POSTOFFICE_TRACK_NUMBER#></th>
+                     <th><#LANG_POSTOFFICE_TRACK_NAME#></th>
+                     <th><#LANG_POSTOFFICE_TRACK_URL#></th>
+                     <th><#LANG_POSTOFFICE_TRACK_DATE#></th>
+                     <th><#LANG_POSTOFFICE_TRACK_STATUS#></th>
+                     <th><#LANG_POSTOFFICE_TRACK_LOCATION#></th>
                      <th>Статус</th>
                   </tr>
                </thead>
@@ -81,28 +81,28 @@
                <div class="checkbox">
                   <label>
                      [#if $T.FLAG_PROXY=="Y"#]
-                     <input name="proxy_flag" type="checkbox" value="on" checked />Использовать прокси
-                     [#else#]
-                     <input name="proxy_flag" type="checkbox" value="on" />Использовать прокси
-                     [#endif#]
-                     <input type="hidden" name="curr_flag" value="<#PROXY_LIST.FLAG_PROXY#>" />
-                  </label>
+                     <input name="proxy_flag" type="checkbox" value="on" checked /><#LANG_POSTOFFICE_PROXY_USE#>
+   [#else#]
+   <input name="proxy_flag" type="checkbox" value="on" /><#LANG_POSTOFFICE_PROXY_USE#>
+   [#endif#]
+   <input type="hidden" name="curr_flag" value="<#PROXY_LIST.FLAG_PROXY#>" />
+</label>
                </div>
                <div class="form-group">
-                  <label for="proxy_host" class="sr-only">Адрес прокси</label>
-                  <input name="proxy_host" type="text" class="form-control" value="<#PROXY_LIST.PROXY_HOST#>" placeholder="Адрес прокси" />
+                  <label for="proxy_host" class="sr-only"><#LANG_POSTOFFICE_PROXY_ADDRESS#></label>
+                  <input name="proxy_host" type="text" class="form-control" value="<#PROXY_LIST.PROXY_HOST#>" placeholder="<#LANG_POSTOFFICE_PROXY_ADDRESS#>" />
                </div>
                <div class="form-group">
-                  <label for="proxy_port" class="sr-only">Порт</label>
-                  <input name="proxy_port" type="text" class="form-control" value="<#PROXY_LIST.PROXY_PORT#>" placeholder="Порт" />
+                  <label for="proxy_port" class="sr-only"><#LANG_POSTOFFICE_PROXY_PORT#></label>
+                  <input name="proxy_port" type="text" class="form-control" value="<#PROXY_LIST.PROXY_PORT#>" placeholder="<#LANG_POSTOFFICE_PROXY_PORT#>" />
                </div>
                <div class="form-group">
-                  <label for="proxy_user" class="sr-only">Логин</label>
-                  <input name="proxy_user" type="text" class="form-control" value="<#PROXY_LIST.PROXY_USER#>" placeholder="Логин" />
+                  <label for="proxy_user" class="sr-only"><#LANG_POSTOFFICE_PROXY_LOGIN#></label>
+                  <input name="proxy_user" type="text" class="form-control" value="<#PROXY_LIST.PROXY_USER#>" placeholder="<#LANG_POSTOFFICE_PROXY_LOGIN#>" />
                </div>
                <div class="form-group">
-                  <label for="proxy_passwd" class="sr-only">Пароль</label>
-                  <input name="proxy_passwd" type="text" class="form-control" value="<#PROXY_LIST.PROXY_PASSWD#>" placeholder="Пароль" />
+                  <label for="proxy_passwd" class="sr-only"><#LANG_POSTOFFICE_PROXY_PASSWORD#></label>
+                  <input name="proxy_passwd" type="text" class="form-control" value="<#PROXY_LIST.PROXY_PASSWD#>" placeholder="<#LANG_POSTOFFICE_PROXY_PASSWORD#>" />
                </div>
                [#end PROXY_LIST#]
                <div class="form-group">
@@ -111,7 +111,7 @@
                   <input type="hidden" name="md" value="panel" />
                   <input type="hidden" name="inst" value="" />
                   <input type="hidden" name="action" value="app_postoffice" />
-                  <button type="submit" name="proxyAdd" class="btn btn-primary input-medium">Изменить</button>
+                  <button type="submit" name="proxyAdd" class="btn btn-primary input-medium"><#LANG_POSTOFFICE_ACTION_CHANGE#></button>
                </div>
             </form>
          </div>
@@ -123,20 +123,20 @@
                <div class="checkbox">
                   <label>
                      [#if $T.FLAG_SEND=="Y"#]
-                     <input name="notify_flag" type="checkbox" value="on" checked />Оповещать о доставке посылки по email
-                     [#else#]
-                     <input name="notify_flag" type="checkbox" value="on" />Оповещать о доставке посылки по email
-                     [#endif#]
-                     <input type="hidden" name="curr_notify_flag" value="<#NOTIFY_LIST.FLAG_SEND#>" />
-                  </label>
+                     <input name="notify_flag" type="checkbox" value="on" checked /><#LANG_POSTOFFICE_NOTIFY_BY_EMAIL#>
+   [#else#]
+   <input name="notify_flag" type="checkbox" value="on" /><#LANG_POSTOFFICE_NOTIFY_BY_EMAIL#>
+   [#endif#]
+   <input type="hidden" name="curr_notify_flag" value="<#NOTIFY_LIST.FLAG_SEND#>" />
+</label>
                </div>
                <div class="form-group">
-                  <label for="notify_email" class="sr-only">Адрес для отправки уведомления</label>
-                  <input name="notify_email" type="text" class="form-control" value="<#NOTIFY_LIST.NOTIFY_EMAIL#>" placeholder="Адрес для отправки уведомления" />
+                  <label for="notify_email" class="sr-only"><#LANG_POSTOFFICE_NOTIFY_EMAIL_ADDRESS#></label>
+                  <input name="notify_email" type="text" class="form-control" value="<#NOTIFY_LIST.NOTIFY_EMAIL#>" placeholder="<#LANG_POSTOFFICE_NOTIFY_EMAIL_ADDRESS#>" />
                </div>
                <div class="form-group">
-                  <label for="notify_subj" class="sr-only">Тема сообщения</label>
-                  <input name="notify_subj" type="text" class="form-control" value="<#NOTIFY_LIST.NOTIFY_SUBJ#>" placeholder="Тема сообщения" />
+                  <label for="notify_subj" class="sr-only"><#LANG_POSTOFFICE_NOTIFY_EMAIL_SUBJECT#></label>
+                  <input name="notify_subj" type="text" class="form-control" value="<#NOTIFY_LIST.NOTIFY_SUBJ#>" placeholder="<#LANG_POSTOFFICE_NOTIFY_EMAIL_SUBJECT#>" />
                </div>
                [#end NOTIFY_LIST#]
                <div class="form-group">
@@ -145,7 +145,7 @@
                   <input type="hidden" name="md" value="panel" />
                   <input type="hidden" name="inst" value="" />
                   <input type="hidden" name="action" value="app_postoffice" />
-                  <button type="submit" name="botifyEmail" class="btn btn-primary input-medium">Изменить</button>
+                  <button type="submit" name="botifyEmail" class="btn btn-primary input-medium"><#LANG_POSTOFFICE_ACTION_CHANGE#></button>
                </div>
             </form>
          </div>
@@ -157,15 +157,15 @@
    <div class="modal-dialog">
       <div class="modal-content">
          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Закрыть</span></button>
-            <h3 class="modal-title" id="PostOfficeTrackRemoveModalLabel">Подтверждение удаления трек номера</h3>
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><#LANG_POSTOFFICE_ACTION_CLOSE#></span></button>
+            <h3 class="modal-title" id="PostOfficeTrackRemoveModalLabel"><#LANG_POSTOFFICE_CONFIRM_DELETE_TITLE#></h3>
          </div>
          <div class="modal-body">
-            <p class="error-text">Вы уверены в том, что хотите удалить данный трек и всю информацию о нём?</p>
+            <p class="error-text"><#LANG_POSTOFFICE_CONFIRM_DELETE_BODY#></p>
          </div>
          <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Отменить</button>
-            <button class="btn btn-danger" data-dismiss="modal">Удалить</button>
+            <button class="btn" data-dismiss="modal" aria-hidden="true"><#LANG_POSTOFFICE_ACTION_CANCEL#></button>
+            <button class="btn btn-danger" data-dismiss="modal"><#LANG_POSTOFFICE_ACTION_DELETE#></button>
          </div>
       </div>
    </div>
