@@ -165,9 +165,12 @@ class app_postoffice extends module
            
             //add TrackNumber to Database
             RussianPost::AddTrack($trackID, $trackName, $trackInfoUrl);
-            $url = "admin.php?pd=&md=panel&inst=&action=app_postoffice";
-            header_remove();
-            header("Location: " . $url, true);
+            $url = isset($_REQUEST['backurl']) ? $_REQUEST['backurl']  : "admin.php?pd=&md=panel&inst=&action=app_postoffice";
+            if ($url != "none")
+            {
+               header_remove();
+               header("Location: " . $url, true);
+            }
             die();
          }
          catch(Exception $e)

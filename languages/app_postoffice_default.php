@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Default language file for PostOffice application
  *
@@ -36,7 +36,8 @@ $dictionary = array(
 'POSTOFFICE_NOTIFY_EMAIL_ADDRESS' => 'Notify address',
 'POSTOFFICE_NOTIFY_EMAIL_SUBJECT' => 'Subject',
 'POSTOFFICE_CONFIRM_DELETE_TITLE' => 'Removal Confirmation track numbers',
-'POSTOFFICE_CONFIRM_DELETE_BODY' =>  'Are you sure you want to delete this track and all the information about it?'
+'POSTOFFICE_CONFIRM_DELETE_BODY' =>  'Are you sure you want to delete this track and all the information about it?',
+'POSTOFFICE_TRACK_ADD_FORM_TITLE' => 'Дабавление трек номера',
 );
 
 

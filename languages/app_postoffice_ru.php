@@ -36,7 +36,8 @@ $dictionary = array(
 'POSTOFFICE_NOTIFY_EMAIL_ADDRESS' => 'Адрес для отправки уведомления',
 'POSTOFFICE_NOTIFY_EMAIL_SUBJECT' => 'Тема сообщения',
 'POSTOFFICE_CONFIRM_DELETE_TITLE' => 'Подтверждение удаления трек номера',
-'POSTOFFICE_CONFIRM_DELETE_BODY' =>  'Вы уверены в том, что хотите удалить данный трек и всю информацию о нём?'
+'POSTOFFICE_CONFIRM_DELETE_BODY' =>  'Вы уверены в том, что хотите удалить данный трек и всю информацию о нём?',
+'POSTOFFICE_TRACK_ADD_FORM_TITLE' => 'Дабавление трек номера',
 );
 
 foreach ($dictionary as $k=>$v)
