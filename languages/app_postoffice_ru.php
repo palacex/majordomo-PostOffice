@@ -8,7 +8,7 @@
  */
 
 $dictionary = array(
-'POSTOFFICE_APP_TITLE'=>'Почта Росссии - Отслеживание посылок',
+'POSTOFFICE_APP_TITLE'=>'Почта России - Отслеживание посылок',
 'POSTOFFICE_TAB_CHECK'=>'Проверка почты',
 'POSTOFFICE_TAB_PROXY' => 'Настройка прокси',
 'POSTOFFICE_TAB_NOTIFICATION' => 'Настройка уведомлений',
