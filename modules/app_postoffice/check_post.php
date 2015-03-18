@@ -126,5 +126,4 @@ function SendResultToClient()
    }
 }
 
-
 ?>
