@@ -1,106 +1,113 @@
-<div class="well">
-   <style type="text/css">
-      #track_dialog
-      {
-         background-color: #ecece9;
-         color: #666;
-      }
-      #track_dialog div 
-      {
-         padding-left:0;
-         padding-bottom:0.5em;
-      }
-      #track_dialog input[type='text'] 
-      {
-         width:100%;
-      }
-      #track_dialog label
-      {
-         color:#666;
-      }
-   </style>
+[#if VIEW_MODE="trackhistory_app_postoffice"#]
+   [#inc app_postoffice_trackhistory.html#]
+[#endif VIEW_MODE#]
 
-   <button id="btn_dialog_add"><#LANG_POSTOFFICE_TRACK_ADD#></button>
-   <div id="track_dialog" title="<#LANG_POSTOFFICE_TRACK_ADD_FORM_TITLE#>">
-      <form class="form-inline" action="/admin.php" method="post" enctype="multipart/form-data" id="TrackAddForm" role="form">
-         <div class="form-group col-xs-3">
-            <label for="trackid" class="sr-only"><#LANG_POSTOFFICE_TRACK_NUMBER#></label><br />
-            <input type="text" placeholder="<#LANG_POSTOFFICE_TRACK_NUMBER#>" name="trackid" class="form-control">
-         </div>
-         <div class="form-group col-xs-3" style="padding-bottom:0.5em;">
-            <label for="trackname" class="sr-only"><#LANG_POSTOFFICE_TRACK_NAME#></label><br />
-            <input type="text" placeholder="<#LANG_POSTOFFICE_TRACK_NAME#>" name="trackname" class="form-control">
-         </div>
-         <div class="form-group col-xs-3" style="padding-bottom:0.5em;">
-            <label for="trackurl" class="sr-only"><#LANG_POSTOFFICE_TRACK_URL#></label><br />
-            <input type="text" placeholder="<#LANG_POSTOFFICE_TRACK_URL#>" name="trackurl" class="form-control">
-         </div>
-         <div class="form-group col-xs-2" style="text-align:right">
-            <input type="hidden" name="act" value="add" />
-            <input type="hidden" name="pd" value="" />
-            <input type="hidden" name="md" value="panel" />
-            <input type="hidden" name="inst" value="" />
-            <input type="hidden" name="backurl" value="none" />
+[#if VIEW_MODE=""#]
+   <div class="well">
+      <style type="text/css">
+         #track_dialog
+         {
+            background-color: #ecece9;
+            color: #666;
+            width: 100% !important;
+         }
+         #track_dialog div 
+         {
+            padding-left:0;
+            padding-bottom:0.5em;
+         }
+         #track_dialog input[type='text'] 
+         {
+            width:100%;
+         }
+         #track_dialog label
+         {
+            color:#666;
+         }
+      </style>
 
-            <input type="hidden" name="action" value="app_postoffice" />
-            <button type="submit" name="postAdd" class="btn btn-primary input-medium"><#LANG_POSTOFFICE_TRACK_ADD#></button>
-         </div>
-      </form>
-   </div>
-   <script>
-      $("#track_dialog").dialog({ autoOpen: false });
-      $("#btn_dialog_add").click(function ()
-      {
-         $("#track_dialog").dialog("open");
-      });
-      $("#TrackAddForm").submit(function ()
-      {
-         $.ajax({
-            type: "POST",
-            url: "/admin.php",
-            data: $("#TrackAddForm").serialize(), // serializes the form's elements.
-            success: function(data)
-            {
-               location.reload();
-            }
+      <button id="btn_dialog_add" class="btn btn-primary input-medium"><#LANG_POSTOFFICE_TRACK_ADD#></button>
+      <div id="track_dialog" title="<#LANG_POSTOFFICE_TRACK_ADD_FORM_TITLE#>">
+         <form class="form-inline" action="/admin.php" method="post" enctype="multipart/form-data" id="TrackAddForm" role="form">
+            <div class="form-group col-xs-3">
+               <label for="trackid" class="sr-only"><#LANG_POSTOFFICE_TRACK_NUMBER#></label><br />
+               <input type="text" placeholder="<#LANG_POSTOFFICE_TRACK_NUMBER#>" name="trackid" class="form-control">
+            </div>
+            <div class="form-group col-xs-3" style="padding-bottom:0.5em;">
+               <label for="trackname" class="sr-only"><#LANG_POSTOFFICE_TRACK_NAME#></label><br />
+               <input type="text" placeholder="<#LANG_POSTOFFICE_TRACK_NAME#>" name="trackname" class="form-control">
+            </div>
+            <div class="form-group col-xs-3" style="padding-bottom:0.5em;">
+               <label for="trackurl" class="sr-only"><#LANG_POSTOFFICE_TRACK_URL#></label><br />
+               <input type="text" placeholder="<#LANG_POSTOFFICE_TRACK_URL#>" name="trackurl" class="form-control">
+            </div>
+            <div class="form-group col-xs-2" style="text-align:right; padding-bottom:0.5em;">
+               <input type="hidden" name="act" value="add" />
+               <input type="hidden" name="pd" value="" />
+               <input type="hidden" name="md" value="panel" />
+               <input type="hidden" name="inst" value="" />
+               <input type="hidden" name="backurl" value="none" />
+               <br />
+               <input type="hidden" name="action" value="app_postoffice" />
+               <button type="submit" name="postAdd" class="btn btn-primary input-medium"><#LANG_POSTOFFICE_TRACK_ADD#></button>
+            </div>
+         </form>
+      </div>
+      <script>
+         $("#track_dialog").dialog({ autoOpen: false, minWidth: 400 });
+         $("#btn_dialog_add").click(function ()
+         {
+            $("#track_dialog").dialog("open");
          });
+         $("#TrackAddForm").submit(function ()
+         {
+            $.ajax({
+               type: "POST",
+               url: "/admin.php",
+               data: $("#TrackAddForm").serialize(), // serializes the form's elements.
+               success: function(data)
+               {
+                  location.reload();
+               }
+            });
 
-         return false; 
-      });
-   </script>
+            return false; 
+         });
+      </script>
    
-   <table class="table table-striped table-condensed">
-      <thead>
-         <tr>
-            <th><#LANG_POSTOFFICE_TRACK_INDEX#></th>
-            <th><#LANG_POSTOFFICE_TRACK_NUMBER#></th>
-            <th><#LANG_POSTOFFICE_TRACK_NAME#></th>
-            <th><#LANG_POSTOFFICE_TRACK_URL#></th>
-            <th><#LANG_POSTOFFICE_TRACK_LM_DATE#></th>
-            <th><#LANG_POSTOFFICE_TRACK_DATE#></th>
-            <th><#LANG_POSTOFFICE_TRACK_CONDITION#></th>
-            <th><#LANG_POSTOFFICE_TRACK_LOCATION#></th>
-            <th><#LANG_POSTOFFICE_TRACK_STATUS#></th>
-         </tr>
-      </thead>
-      <tbody>
-         [#begin TRACK_LIST#]
-         <tr>
-            <td><#TRACK_LIST.TRACK_NUM#></td>
-            <td><#TRACK_LIST.TRACK_ID#></td>
-            <td><#TRACK_LIST.TRACK_NAME#></td>
-            <td><a href="<#TRACK_LIST.TRACK_URL#>" target="_blank"><#TRACK_LIST.TRACK_URL#></a></td>
-            <td><#TRACK_LIST.TRACK_DATE#></td>
-            <td><#TRACK_LIST.OPER_DATE#></td>
-            <td><#TRACK_LIST.OPER_NAME#>: <#TRACK_LIST.ATTRIB_NAME#></td>
-            <td><#TRACK_LIST.OPER_POSTPLACE#></td>
-            [#if $T.FLAG_CHECK=="Y"#]
-            <td><span class="label label-success">Active</span></td>
-            [#else#]
-            <td><span class="label label-default">Inactive</span></td>
-            [#endif#]
-         </tr>
-         [#end TRACK_LIST#]
-      </tbody>
-   </table>
-</div>
+      <table class="table table-striped table-condensed">
+         <thead>
+            <tr>
+               <th><#LANG_POSTOFFICE_TRACK_INDEX#></th>
+               <th><#LANG_POSTOFFICE_TRACK_NUMBER#></th>
+               <th><#LANG_POSTOFFICE_TRACK_NAME#></th>
+               <th><#LANG_POSTOFFICE_TRACK_URL#></th>
+               <th><#LANG_POSTOFFICE_TRACK_LM_DATE#></th>
+               <th><#LANG_POSTOFFICE_TRACK_DATE#></th>
+               <th><#LANG_POSTOFFICE_TRACK_CONDITION#></th>
+               <th><#LANG_POSTOFFICE_TRACK_LOCATION#></th>
+               <th><#LANG_POSTOFFICE_TRACK_STATUS#></th>
+            </tr>
+         </thead>
+         <tbody>
+            [#begin TRACK_LIST#]
+            <tr>
+               <td><#TRACK_LIST.TRACK_NUM#></td>
+               <td><a href="?view_mode=trackhistory_app_postoffice&id=<#TRACK_LIST.TRACK_ID#>"><#TRACK_LIST.TRACK_ID#></a></td>
+               <td><#TRACK_LIST.TRACK_NAME#></td>
+               <td><a href="<#TRACK_LIST.TRACK_URL#>" target="_blank"><#TRACK_LIST.TRACK_URL#></a></td>
+               <td><#TRACK_LIST.TRACK_DATE#></td>
+               <td><#TRACK_LIST.OPER_DATE#></td>
+               <td><#TRACK_LIST.OPER_NAME#>: <#TRACK_LIST.ATTRIB_NAME#></td>
+               <td><#TRACK_LIST.OPER_POSTPLACE#></td>
+               [#if $T.FLAG_CHECK=="Y"#]
+               <td><span class="label label-success">Active</span></td>
+               [#else#]
+               <td><span class="label label-default">Inactive</span></td>
+               [#endif#]
+            </tr>
+            [#end TRACK_LIST#]
+         </tbody>
+      </table>
+   </div>
+[#endif VIEW_MODE#]

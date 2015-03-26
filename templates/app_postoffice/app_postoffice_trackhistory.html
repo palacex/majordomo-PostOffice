@@ -1,0 +1,31 @@
+<div class="panel-body text-center">
+   <h4 class="panel-header"><#TRACK_LIST.TRACK_URL#>
+      [#if TRACK_URL!=""#]<a href="<#TRACK_URL#>" target="_blank"><#TRACK_ID#></a>[#else#]<#TRACK_ID#>[#endif#]
+   </h4>
+   <small><#TRACK_NAME#></small>
+</div>
+
+<div class="well">
+   <table class="table table-striped table-condensed">
+      <thead>
+         <tr>
+            <th><#LANG_POSTOFFICE_TRACK_DATE#></th>
+            <th><#LANG_POSTOFFICE_TRACK_OPER_NAME#></th>
+            <th><#LANG_POSTOFFICE_TRACK_OPER_POSTCODE#></th>
+            <th><#LANG_POSTOFFICE_TRACK_OPER_POSTPLACE#></th>
+            <th><#LANG_POSTOFFICE_TRACK_ITEM_WEIGHT#></th>
+         </tr>
+      </thead>
+      <tbody>
+         [#begin TRACK_HISTORY#]
+         <tr>
+            <td><#TRACK_HISTORY.OPER_DATE#></td>
+            <td><#TRACK_HISTORY.OPER_NAME#>[#if $T.ATTRIB_NAME!=""#]: <#TRACK_HISTORY.ATTRIB_NAME#>[#endif#]</td>
+            <td>[#if $T.OPER_POSTCODE!=0#]<#TRACK_HISTORY.OPER_POSTCODE#>[#endif#]</td>
+            <td><#TRACK_HISTORY.OPER_POSTPLACE#></td>
+            <td><#TRACK_HISTORY.ITEM_WEIGHT#></td>
+         </tr>
+         [#end TRACK_HISTORY#]
+      </tbody>
+   </table>
+</div>
