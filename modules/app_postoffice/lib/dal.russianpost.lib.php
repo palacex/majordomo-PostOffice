@@ -231,7 +231,7 @@ namespace DAL
       
       /**
        * Select short detail about last track position
-       * @param $trackID string TrackNumber
+       * @param string $trackID TrackNumber
        * @return array
        */
       public static function SelectTrackLastInfoByID($trackID)
@@ -250,8 +250,8 @@ namespace DAL
       
       /**
        * Return true then trackinfo extist on current date
-       * @param $trackID   string TrackNumber
-       * @param $operDate  OperationDate
+       * @param string $trackID TrackNumber
+       * @param string $operDate  OperationDate
        * @return boolean
        */
       public static function isTrackInfoExist($trackID, $operDate)
@@ -265,6 +265,25 @@ namespace DAL
          $infoCnt = $result['CNT'];
          
          return $infoCnt > 0;
+      }
+      
+      /**
+       * Return delivery info by track id
+       * @param string $trackID Track number
+       * @return array
+       */
+      public static function SelectTrackHistoryByID($trackID)
+      {
+         $query = "select t.TRACK_ID, t.TRACK_NAME, t.TRACK_URL, 
+                          i.OPER_DATE, i.OPER_TYPE, i.OPER_NAME, i.ATTRIB_ID, i.ATTRIB_NAME, i.OPER_POSTCODE, i.OPER_POSTPLACE, 
+                          i.ITEM_WEIGHT, i.DECLARED_VALUE, i.DELIVERY_PRICE, i.DESTINATION_POSTCODE, i.DELIVERY_ADDRESS, i.LM_DATE
+                     from POST_TRACKINFO i, POST_TRACK t
+                    where i.TRACK_ID = t.TRACK_ID
+                      and t.TRACK_ID = '". $trackID . "';";
+         
+         $track = SQLSelect($query);
+         
+         return $track;
       }
       
       /**
@@ -301,11 +320,11 @@ namespace DAL
       
       /**
        * Set proxy settings for check post
-       * @param $proxyFlag Flag
-       * @param $proxyHost Host
-       * @param $proxyPort Port
-       * @param $proxyUser User
-       * @param $proxyPassword Password
+       * @param string $proxyFlag Flag
+       * @param string $proxyHost Host
+       * @param string $proxyPort Port
+       * @param string $proxyUser User
+       * @param string $proxyPassword Password
        * @return boolean
        */
       public static function SetProxySettings($proxyFlag, $proxyHost, $proxyPort, $proxyUser, $proxyPassword, $currFlag)

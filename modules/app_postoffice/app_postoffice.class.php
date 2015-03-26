@@ -119,6 +119,9 @@ class app_postoffice extends module
     */
    function admin(&$out)
    {
+      if ($this->view_mode=='trackhistory_app_postoffice') {
+         $this->trackhistory_app_postoffice($out, $this->id);
+      }
       $action = isset($_REQUEST['act']) ?  $_REQUEST['act'] : "show";
       
       if ($action == "del")
@@ -641,6 +644,34 @@ class app_postoffice extends module
       }
       
       //return $resultMessage;
+   }
+   
+   /**
+    * app_quotes edit/add
+    *
+    * @access public
+    */
+   function trackhistory_app_postoffice(&$out, $id)
+   {
+      $resultMessage = "";
+      try
+      {
+         // Get TrackNumber form request
+         $trackID = $id; 
+         // Exit then TrackNumber does't exist.
+         if ($trackID == null)
+            throw new Exception("TrackNumber not found.");
+         
+         $res = RussianPost::SelectTrackHistoryByID($trackID);
+         $out['TRACK_HISTORY']  = $res;
+         $out['TRACK_URL'] = empty($res[0]['TRACK_URL']) ? '' : urldecode($res[0]['TRACK_URL']);
+         $out['TRACK_NAME'] = $res[0]['TRACK_NAME'];
+         $out['TRACK_ID'] = $id;
+      }
+      catch(Exception $e)
+      {
+         $resultMessage = "Oops! We have error: " . $e->getMessage();
+      }
    }
    
    /**
