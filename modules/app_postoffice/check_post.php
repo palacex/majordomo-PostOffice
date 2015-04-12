@@ -86,7 +86,7 @@ function GetTrackInfoForNotify()
       $list .= $curStr;
    }
    
-   $message = $header . $trackList . $footer;
+   $message = $header . $list . $footer;
    
    return $message;
 }
