@@ -12,6 +12,7 @@ $dictionary = array(
 'POSTOFFICE_TAB_CHECK'=>'Проверка почты',
 'POSTOFFICE_TAB_PROXY' => 'Настройка прокси',
 'POSTOFFICE_TAB_NOTIFICATION' => 'Настройка уведомлений',
+'POSTOFFICE_TAB_HISTORY' => 'История',
 'POSTOFFICE_TRACK_INDEX' => '№',
 'POSTOFFICE_TRACK_NUMBER' => 'Номер трека',
 'POSTOFFICE_TRACK_NAME' => 'Название трека',

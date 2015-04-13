@@ -4,6 +4,7 @@
       <li class="active"><a href="#check" data-toggle="tab"><#LANG_POSTOFFICE_TAB_CHECK#></a></li>
       <li><a href="#proxy" data-toggle="tab"><#LANG_POSTOFFICE_TAB_PROXY#></a></li>
       <li><a href="#email" data-toggle="tab"><#LANG_POSTOFFICE_TAB_NOTIFICATION#></a></li>
+      <li><a href="#history" data-toggle="tab"><#LANG_POSTOFFICE_TAB_HISTORY#></a></li>
    </ul>
    <div id="myTabContent" class="tab-content">
       <div class="tab-pane active in" id="check">
@@ -149,6 +150,41 @@
             </form>
          </div>
       </div>
+      <div id="history" class="tab-pane fade">
+         <div class="well">
+            <table class="table table-striped table-condensed">
+               <thead>
+                  <tr>
+                     <th>№</th>
+                     <th><#LANG_POSTOFFICE_TRACK_NUMBER#></th>
+                     <th><#LANG_POSTOFFICE_TRACK_NAME#></th>
+                     <th><#LANG_POSTOFFICE_TRACK_URL#></th>
+                     <th><#LANG_POSTOFFICE_TRACK_DATE#></th>
+                     <th><#LANG_POSTOFFICE_TRACK_STATUS#></th>
+                     <th><#LANG_POSTOFFICE_TRACK_LOCATION#></th>
+                     <th>&nbsp;</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  [#begin TRACK_HISTORY_LIST#]
+                  <tr>
+                     <td><#TRACK_HISTORY_LIST.TRACK_NUM#></td>
+                     <td><a href="?view_mode=trackhistory_app_postoffice&id=<#TRACK_HISTORY_LIST.TRACK_ID#>"><#TRACK_HISTORY_LIST.TRACK_ID#></a></td>
+                     <td><#TRACK_HISTORY_LIST.TRACK_NAME#></td>
+                     <td><a href="<#TRACK_HISTORY_LIST.TRACK_URL#>" target="_blank"><#TRACK_HISTORY_LIST.TRACK_URL#></a></td>
+                     <td><#TRACK_HISTORY_LIST.OPER_DATE#></td>
+                     <td><#TRACK_HISTORY_LIST.OPER_NAME#>: <#TRACK_HISTORY_LIST.ATTRIB_NAME#></td>
+                     <td><#TRACK_HISTORY_LIST.OPER_POSTPLACE#></td>
+                     <td>
+                        <a href="#PostOfficeTrackRemoveModal" role="button" class="confirm-track-delete" data-track="<#TRACK_HISTORY_LIST.TRACK_ID#>" data-toggle="modal" data-target="#PostOfficeTrackRemoveModal"><i class="glyphicon glyphicon-remove"></i></a>
+                     </td>
+                  </tr>
+                  [#end TRACK_HISTORY_LIST#]
+               </tbody>
+            </table>
+         </div>
+      </div>
+
    </div>
 </div>
 <div class="modal fade" id="PostOfficeTrackRemoveModal" tabindex="-1" role="dialog" aria-labelledby="PostOfficeTrackRemoveModalLabel" aria-hidden="true">

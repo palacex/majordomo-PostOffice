@@ -119,9 +119,9 @@ class app_postoffice extends module
     */
    function admin(&$out)
    {
-      if ($this->view_mode=='trackhistory_app_postoffice') {
+      if ($this->view_mode=='trackhistory_app_postoffice') 
          $this->trackhistory_app_postoffice($out, $this->id);
-      }
+      
       $action = isset($_REQUEST['act']) ?  $_REQUEST['act'] : "show";
       
       if ($action == "del")
@@ -283,10 +283,12 @@ class app_postoffice extends module
          $trackArray     = $this->GetLastCheckedTracks();
          $proxySettings  = RussianPost::SelectProxySettings();
          $notifySettings = $this->SelectNotifySettings();
+         $trackHistoryArray = $this->SelectHistoryTracks();
          
          $out['TRACK_LIST']  = $trackArray;
          $out['PROXY_LIST']  = $proxySettings;
          $out['NOTIFY_LIST'] = $notifySettings;
+         $out['TRACK_HISTORY_LIST']  = $trackHistoryArray;
       }
    }
 
@@ -681,6 +683,39 @@ class app_postoffice extends module
    function SelectNotifySettings()
    {
       return RussianPost::SelectNotifySettings();
+   }
+   
+   /**
+    * Select deliveried tracks
+    * @return array
+    */
+   function SelectHistoryTracks()
+   {
+      $trackArray = array();
+      $trackNum   = 1;
+      
+      $tracks  = RussianPost::SelectHistoryTracks();
+      
+      foreach ($tracks as $track)
+      {
+         $trackID = $track['TRACK_ID'];
+         $arr = array();
+         $arr['TRACK_NUM']       = $trackNum;
+         $arr['TRACK_ID']        = $trackID;
+         $arr['TRACK_NAME']      = $track['TRACK_NAME'];
+         $arr['FLAG_CHECK']      = $track['FLAG_CHECK'];
+         $arr['TRACK_DATE']      = $track['TRACK_DATE'];
+         $arr['TRACK_URL']       = urldecode($track['TRACK_URL']);
+         $arr['OPER_DATE']       = $track['OPER_DATE']; 
+         $arr['OPER_NAME']       = $track['OPER_NAME']; 
+         $arr['ATTRIB_NAME']     = $track['ATTRIB_NAME'];
+         $arr['OPER_POSTPLACE']  = $track['OPER_POSTPLACE'];
+         
+         $trackArray[] = $arr;
+         $trackNum++;
+      }
+      
+      return $trackArray;
    }
 }
 ?>

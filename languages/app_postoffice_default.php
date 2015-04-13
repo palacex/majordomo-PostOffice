@@ -12,6 +12,7 @@ $dictionary = array(
 'POSTOFFICE_TAB_CHECK'=>'Check parcels',
 'POSTOFFICE_TAB_PROXY' => 'Proxy',
 'POSTOFFICE_TAB_NOTIFICATION' => 'Notification',
+'POSTOFFICE_TAB_HISTORY' => 'History',
 'POSTOFFICE_TRACK_INDEX' => '#',
 'POSTOFFICE_TRACK_NUMBER' => 'Track number',
 'POSTOFFICE_TRACK_NAME' => 'Track name',
