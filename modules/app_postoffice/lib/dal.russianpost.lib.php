@@ -51,7 +51,9 @@ namespace DAL
                                         ) a
                                 ) as pinfo 
                           using (TRACK_ID, TRACK_NAME, FLAG_CHECK, TRACK_DATE, TRACK_URL)
-                 order by OPER_DATE desc, LM_DATE desc";
+                    where (OPER_NAME is null or OPER_NAME != 'Вручение')
+                       or (OPER_NAME = 'Вручение' and OPER_DATE >= DATE_SUB(NOW(),INTERVAL 7 day))
+                 order by FLAG_CHECK desc, OPER_DATE desc, LM_DATE desc";
          
          $track = SQLSelect($query);
          
@@ -438,6 +440,24 @@ namespace DAL
          $res = SQLExec($query);
          
          return $res;
+      }
+      
+      /**
+       * Return tracks ordered by ckeck date on russian post
+       * @return array
+       */
+      public static function SelectHistoryTracks()
+      {
+         $track = array();
+         $query = "select t.TRACK_ID, t.TRACK_NAME,  t.FLAG_CHECK,  t.TRACK_DATE, t.TRACK_URL,
+                          i.OPER_DATE, i.ATTRIB_NAME, i.OPER_POSTPLACE, i.OPER_NAME
+                     from POST_TRACKINFO i , POST_TRACK t
+                    where t.TRACK_ID  = i.TRACK_ID
+                      and i.OPER_NAME = 'Вручение'";
+         
+         $track = SQLSelect($query);
+         
+         return $track;
       }
    }
 }
