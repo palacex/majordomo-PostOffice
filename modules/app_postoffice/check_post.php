@@ -118,7 +118,7 @@ function SendResultToClient()
       if (!isset($mailBody))
          return;
       
-      SendMail_html($mailFrom, $mailTo, $mailSubject, $mailBody);
+      SendMail_html($mailFrom, $mailTo, utf2win($mailSubject), utf2win($mailBody));
    }
    catch (Exception $e)
    {
