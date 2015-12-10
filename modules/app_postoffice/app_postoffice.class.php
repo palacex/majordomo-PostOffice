@@ -9,7 +9,7 @@ use DAL\RussianPostDAL as RussianPost;
  *
  * @package PostOffice
  * @author LDV <dev@silvergate.ru>
- * @version 1.5
+ * @version 1.7
  */
 class app_postoffice extends module
 {
@@ -257,12 +257,14 @@ class app_postoffice extends module
             // Get TrackNumber form request
             $notifyFlag  = isset($_REQUEST['notify_flag'])   ? $_REQUEST['notify_flag']    : null;
             $notifyFlag  = $notifyFlag == null ? "N" : "Y";
-            $currFlag    = isset($_REQUEST['curr_notify_flag']) ? $_REQUEST['curr_notify_flag']  : null; 
-            $notifyEmail = isset($_REQUEST['notify_email'])     ? $_REQUEST['notify_email']      : null; 
-            $notifySubj  = isset($_REQUEST['notify_subj'])      ? $_REQUEST['notify_subj']       : null; 
+            $currFlag    = isset($_REQUEST['curr_notify_flag']) ? $_REQUEST['curr_notify_flag']  : null;
+            $notifyEmail = isset($_REQUEST['notify_email'])     ? $_REQUEST['notify_email']      : null;
+            $notifySubj  = isset($_REQUEST['notify_subj'])      ? $_REQUEST['notify_subj']       : null;
+            $accName     = isset($_REQUEST['pochta_login'])     ? $_REQUEST['pochta_login']      : null;
+            $accPassword = isset($_REQUEST['pochta_passwd'])    ? $_REQUEST['pochta_passwd']     : null;
             
             //add proxy settings to Database
-            $res = RussianPost::SetNotificationSettings($notifyFlag, $currFlag, $notifyEmail, $notifySubj);
+            $res = RussianPost::SetNotificationSettings($notifyFlag, $currFlag, $notifyEmail, $notifySubj, $accName, $accPassword);
             $url = "admin.php?pd=&md=panel&inst=&action=app_postoffice#email";
             header_remove();
             header("Location: " . $url, true);
@@ -342,6 +344,8 @@ class app_postoffice extends module
          $query .= " LM_DATE              DATETIME not null,";
          $query .= " NOTIFY_EMAIL         VARCHAR(64),";
          $query .= " NOTIFY_SUBJ          VARCHAR(255),";
+         $query .= " ACC_NAME             VARCHAR(64),";
+         $query .= " ACC_PASSWD           VARCHAR(64),";
          $query .= " primary key (FLAG_SEND)";
          $query .= ") ENGINE=InnoDB CHARACTER SET=utf8;";
          SQLExec($query);
@@ -419,6 +423,8 @@ class app_postoffice extends module
          $query .= " LM_DATE              DATETIME not null,";
          $query .= " NOTIFY_EMAIL         VARCHAR(64),";
          $query .= " NOTIFY_SUBJ          VARCHAR(255),";
+         $query .= " ACC_NAME             VARCHAR(64),";
+         $query .= " ACC_PASSWD           VARCHAR(64),";
          $query .= " primary key (FLAG_SEND)";
          $query .= " ) ENGINE=InnoDB CHARACTER SET=utf8;";
          SQLExec($query);
@@ -551,26 +557,36 @@ class app_postoffice extends module
          $resultMessage = "";
          // get tracks
          $tracks = RussianPost::SelectTrackByFlag(RussianPost::FLAG_ACTIVE_TRACK);
+        
          // if tracks not found then quit
          if(count($tracks) == 0)
             throw new Exception("Track numbers not found!");
+
+         $postSettings = RussianPost::SelectNotifySettings();
+         $postAccName = $postSettings["POCHTA_LOGIN"];
+         $postAccPassword = $postSettings["POCHTA_PASSWORD"];
+
+         if (isEmpty($postAccName) || isEmpty($postAccPassword))
+            throw new Exception("Pochta.ru account not found");
          
          // init the client with or without proxy
          // Check proxy settings
-         $proxySettings = RussianPost::SelectProxySettings(); 
+         $proxySettings = RussianPost::SelectProxySettings();
          if (isset($proxySettings))
          {
             if ($proxySettings["FLAG_PROXY"] == "Y")
-               $client = new RussianPostAPI($proxySettings["PROXY_HOST"],$proxySettings["PROXY_PORT"],$proxySettings["PROXY_USER"],$proxySettings["PROXY_PASSWD"]);
+            {
+               $client = new RussianPostAPI($proxySettings["PROXY_HOST"], $proxySettings["PROXY_PORT"], $proxySettings["PROXY_USER"], $proxySettings["PROXY_PASSWD"], $postAccName, $postAccPassword, "RUS");
+            }
             else
-               $client = new RussianPostAPI();
+            {
+               $client = new RussianPostAPI("", "", "", "", $postAccName, $postAccPassword, "RUS");
+            }
          }
          else
          {
-            
-            $client = new RussianPostAPI();
+            $client = new RussianPostAPI("", "", "", "", $postAccName, $postAccPassword, "RUS");
          }
-         
          $timeSeparator  = 'T';   //$separator1
          $timeSeparator2 = '.';   //$separator2
          
@@ -585,8 +601,9 @@ class app_postoffice extends module
             {
                $trackInfo = $client->getOperationHistory($trackID);
                // skip track if no info
-               if(count($trackInfo) == 0) continue;
-               
+               $cnt = count($trackInfo);
+               if($cnt == 0) continue;
+              
                foreach ($trackInfo as $track)
                {
                   $operationDate             = '';  // Operation Date
