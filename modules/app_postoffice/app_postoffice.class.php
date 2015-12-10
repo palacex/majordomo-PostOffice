@@ -566,7 +566,7 @@ class app_postoffice extends module
          $postAccName = $postSettings["POCHTA_LOGIN"];
          $postAccPassword = $postSettings["POCHTA_PASSWORD"];
 
-         if (isEmpty($postAccName) || isEmpty($postAccPassword))
+         if (empty($postAccName) or empty($postAccPassword))
             throw new Exception("Pochta.ru account not found");
          
          // init the client with or without proxy
