@@ -429,8 +429,8 @@ class app_postoffice extends module
          $query .= " ) ENGINE=InnoDB CHARACTER SET=utf8;";
          SQLExec($query);
 
-         $query = "insert into POST_MAIL(FLAG_SEND, LM_DATE, NOTIFY_EMAIL, NOTIFY_SUBJ)";
-         $query .= " select * from TMP_POST_MAIL;";
+         $query = "insert into POST_MAIL(FLAG_SEND, LM_DATE, NOTIFY_EMAIL, NOTIFY_SUBJ, ACC_NAME, ACC_PASSWD)";
+         $query .= " select FLAG_SEND, LM_DATE, NOTIFY_EMAIL, NOTIFY_SUBJ, '', '' from TMP_POST_MAIL;";
          SQLExec($query);
 
          $query = " create table POST_TRACK(";
