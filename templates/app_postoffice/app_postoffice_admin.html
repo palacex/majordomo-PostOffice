@@ -1,9 +1,9 @@
-
+﻿
 <div class="well">
    <ul class="nav nav-tabs">
       <li class="active"><a href="#check" data-toggle="tab"><#LANG_POSTOFFICE_TAB_CHECK#></a></li>
       <li><a href="#proxy" data-toggle="tab"><#LANG_POSTOFFICE_TAB_PROXY#></a></li>
-      <li><a href="#email" data-toggle="tab"><#LANG_POSTOFFICE_TAB_NOTIFICATION#></a></li>
+      <li><a href="#settings" data-toggle="tab"><#LANG_POSTOFFICE_TAB_SETTINGS#></a></li>
       <li><a href="#history" data-toggle="tab"><#LANG_POSTOFFICE_TAB_HISTORY#></a></li>
    </ul>
    <div id="myTabContent" class="tab-content">
@@ -116,7 +116,7 @@
             </form>
          </div>
       </div>
-      <div class="tab-pane fade" id="email">
+      <div class="tab-pane fade" id="settings">
          <div class="clearfix">
             <form class="form" action="admin.php" method="post" enctype="multipart/form-data" id="EmailSettings">
                [#begin NOTIFY_LIST#]
@@ -137,6 +137,14 @@
                <div class="form-group">
                   <label for="notify_subj" class="sr-only"><#LANG_POSTOFFICE_NOTIFY_EMAIL_SUBJECT#></label>
                   <input name="notify_subj" type="text" class="form-control" value="<#NOTIFY_LIST.NOTIFY_SUBJ#>" placeholder="<#LANG_POSTOFFICE_NOTIFY_EMAIL_SUBJECT#>" />
+               </div>
+               <div class="form-group">
+                  <label for="pochta_login" class="sr-only"><#LANG_POSTOFFICE_NOTIFY_POCHTA_LOGIN#></label>
+                  <input name="pochta_login" type="text" class="form-control" value="<#NOTIFY_LIST.POCHTA_LOGIN#>" placeholder="<#LANG_POSTOFFICE_NOTIFY_POCHTA_LOGIN#>" />
+               </div>
+               <div class="form-group">
+                  <label for="pochta_passwd" class="sr-only"><#LANG_POSTOFFICE_NOTIFY_POCHTA_PASSWORD#></label>
+                  <input name="pochta_passwd" type="password" class="form-control" value="<#NOTIFY_LIST.POCHTA_PASSWORD#>" placeholder="<#LANG_POSTOFFICE_NOTIFY_POCHTA_PASSWORD#>" />
                </div>
                [#end NOTIFY_LIST#]
                <div class="form-group">

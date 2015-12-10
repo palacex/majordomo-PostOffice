@@ -401,7 +401,7 @@ namespace DAL
        */
       public static function SelectNotifySettings()
       {
-         $query = "select FLAG_SEND, NOTIFY_EMAIL, NOTIFY_SUBJ
+         $query = "select FLAG_SEND, NOTIFY_EMAIL, NOTIFY_SUBJ, ACC_NAME POCHTA_LOGIN, ACC_PASSWD POCHTA_PASSWORD
                      from POST_MAIL;";
          
          $notify = SQLSelect($query);
@@ -410,14 +410,16 @@ namespace DAL
       }
       
       /**
-       * Set email notification settings
-       * @param $notifyFlag string Send email notification or not (Y/N)
-       * @param $currFlag string Current notification flag (Y/N,null)
-       * @param $notifyEmail string Email to send notify
-       * @param $notifySubject string Email subject
-       * @return boolean Action result
+       * Summary of SetNotificationSettings
+       * @param string $notifyFlag    Send email notification or not (Y/N)
+       * @param string $currFlag      Current notification flag (Y/N,null)
+       * @param string $notifyEmail   Email to send notify
+       * @param string $notifySubject Email subject
+       * @param string $notifySubject Pochta.ru API login
+       * @param string $notifySubject Pochta.ru API password
+       * @return int|resource
        */
-      public static function SetNotificationSettings($notifyFlag, $currFlag, $notifyEmail, $notifySubject)
+      public static function SetNotificationSettings($notifyFlag, $currFlag, $notifyEmail, $notifySubject, $accName, $accPassword)
       {
          $RequestDate =  date('Y-m-d H:i:s');
         
@@ -433,7 +435,9 @@ namespace DAL
                          set FLAG_SEND    = '" . $notifyFlag    . "',
                              LM_DATE      = '" . $RequestDate   . "',
                              NOTIFY_EMAIL = '" . $notifyEmail   . "',
-                             NOTIFY_SUBJ  = '" . $notifySubject . "'
+                             NOTIFY_SUBJ  = '" . $notifySubject . "',
+                             ACC_NAME     = '" . $accName       . "',
+                             ACC_PASSWD   = '" . $accPassword   . "'
                        where FLAG_SEND    = '" . $currFlag      . "'";
          }
          
