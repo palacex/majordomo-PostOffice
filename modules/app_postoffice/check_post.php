@@ -14,7 +14,9 @@ require_once(DIR_MODULES . '/app_postoffice/app_postoffice.class.php');
 $db = new mysql(DB_HOST, '', DB_USER, DB_PASSWORD, DB_NAME); 
 
 // start logger
-$log = Logger::getLogger("PostOffice");
+//$log = Logger::getLogger("PostOffice");
+$log = getLogger();
+
 try 
 {
    $PostOffice = new app_postoffice();

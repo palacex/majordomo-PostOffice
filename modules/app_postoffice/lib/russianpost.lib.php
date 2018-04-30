@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Russian Post tracking API PHP library
  * @author InJapan Corp. <max@injapan.ru>
@@ -61,13 +61,14 @@ class RussianPostAPI
       $this->proxyAuthPassword = $proxyAuthPassword;
       $this->accName           = $accName;
       $this->accPassword       = $accPassword;
+      $this->lang              = $lang;
 
       $options = array();
 
       if (!empty($this->proxyHost) && !empty($this->proxyPort) && !empty($this->proxyAuthUser) && !empty($this->proxyAuthPassword))
       {
          $options = array('proxy_host'     => $this->proxyHost,
-                          'proxy_host'     => $this->proxyPort,
+                          'proxy_port'     => $this->proxyPort,
                           'proxy_login'    =>  $this->proxyAuthUser,
                           'proxy_password' => $this->proxyAuthPassword,
                           'trace'          => 1,

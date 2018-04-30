@@ -18,7 +18,7 @@ class app_postoffice extends module
     * Module class constructor
     * @access private
     */
-   function app_postoffice()
+   function __construct()
    {
       $this->name            = "app_postoffice";
       $this->title           = "PostOffice";
@@ -549,7 +549,8 @@ class app_postoffice extends module
    function CheckPostTrack()
    {
       // start logger
-      $log = Logger::getLogger(__METHOD__);
+      //$log = Logger::getLogger(__METHOD__);
+      $log = getLogger();
       
       try
       {
