@@ -18,7 +18,7 @@ class app_postoffice extends module
     * Module class constructor
     * @access private
     */
-   function app_postoffice()
+   function __construct()
    {
       $this->name            = "app_postoffice";
       $this->title           = "PostOffice";
@@ -544,7 +544,7 @@ class app_postoffice extends module
    
    /**
     * Check tracks on russan post
-    * @return operation message
+    * @return boolean operation message
     */
    function CheckPostTrack()
    {
