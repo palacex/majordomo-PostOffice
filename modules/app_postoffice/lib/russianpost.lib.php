@@ -69,7 +69,7 @@ class RussianPostAPI
       {
          $options = array('proxy_host'     => $this->proxyHost,
                           'proxy_port'     => $this->proxyPort,
-                          'proxy_login'    =>  $this->proxyAuthUser,
+                          'proxy_login'    => $this->proxyAuthUser,
                           'proxy_password' => $this->proxyAuthPassword,
                           'trace'          => 1,
                           'soap_version'   => SOAP_1_2);
@@ -123,12 +123,18 @@ class RussianPostAPI
          $outRecord->operationAttributeId     = (int) $rec->OperationParameters->OperAttr->Id;
 
          $outRecord->operationPlacePostalCode = (string) $rec->AddressParameters->OperationAddress->Index;
+         
+         if (strlen($outRecord->destinationPostalCode) == 0)
+            $outRecord->destinationPostalCode="0";
+
          $outRecord->operationPlaceName       = (string) $rec->AddressParameters->OperationAddress->Description;
 
          $outRecord->destinationPostalCode    = (string) $rec->AddressParameters->DestinationAddress->Index;
          $outRecord->destinationAddress       = (string) $rec->AddressParameters->DestinationAddress->Description;
 
          $outRecord->operationDate            = (string) $rec->OperationParameters->OperDate;
+         $outRecord->operationDate = str_replace ("T" , " ", $outRecord->operationDate);
+         $outRecord->operationDate = substr ($outRecord->operationDate, 0, 18);
 
          $outRecord->itemWeight               = round(floatval($rec->ItemParameters->Mass) / 1000, 3);
          $outRecord->declaredValue            = round(floatval($rec->FinanceParameters->Value) / 100, 2);
