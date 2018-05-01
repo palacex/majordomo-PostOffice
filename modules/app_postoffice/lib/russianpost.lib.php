@@ -42,6 +42,7 @@ class RussianPostAPI
    protected $accName;
    protected $accPassword;
    protected $client;
+   protected $lang;
 
    /**
     * Constructor. Pass proxy config here.
